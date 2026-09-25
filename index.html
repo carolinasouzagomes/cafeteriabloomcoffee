@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Bloom Coffee</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container py-2">
+                <a class="navbar-brand" href="/index.html">
+                    Bloom <span>☕</span> Coffee
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menuPrincipal">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/index.html">Ìnicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/templates/produtos.html">produto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/templates/pedidos.html">pedidos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio">
+            <div id="carouselBloom" class="carousel slide hero-carousel" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                </div>
+
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/static/img/foto_cafeteria.jpg" alt="Café e gatos em ambiente acolhedor">
+                        <div class="carousel-caption">
+                            <h1>Café, gatos e aconchego</h1>
+                            <p>Um cantinho especial para você relaxar e aproveitar cada momento.</p>
+                            <a href="/templates/produtos.html" class="btn btn-coffee">Conheça nosso cardápio</a>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1800&q=85"
+                            alt="Cafeteria com café e ambiente moderno">
+                        <div class="carousel-caption">
+                            <h1>Sabores que aquecem</h1>
+                            <p>Cafés selecionados e preparados com carinho para você.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="/static/img/foto_cafe_gatinho.jpg" alt="Gato descansando em café">
+                        <div class="carousel-caption">
+                            <h1>Seu novo lugar favorito</h1>
+                            <p>Uma experiência única para amantes de café e gatos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselBloom"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselBloom"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="container py-5 my-4">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <img class="about-image" src="/static/img/cafe_de_gato.jpg" alt="Gato em uma cafeteria acolhedora">
+                </div>
+
+                <div class="col-lg-6">
+                    <span class="text-uppercase fw-bold small" style="color: var(--laranja);">
+                        Uma experiência diferente
+                    </span>
+
+                    <h2 class="section-title display-6 mt-2">
+                        Aqui fazemos com café quentinho e gostoso com a imagem do seu gatinho!
+                    </h2>
+
+                    <p class="section-subtitle mt-3">
+                        No Bloom Coffee, cada detalhe foi pensado para criar um ambiente acolhedor, descontraído e cheio
+                        de personalidade.
+                    </p>
+
+                    <p>
+                        Aqui você pode trazer seu felino e pedir um café personalizado com a carinha dele!
+                    </p>
+
+                    <a href="#pedidos" class="btn btn-coffee mt-2">Faça seu pedido</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="produtos" class="py-5" style="background-color: var(--bege);">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <span class="text-uppercase fw-bold small" style="color: var(--laranja);">
+                        Delícias da casa
+                    </span>
+                    <h2 class="section-title display-6 mt-2">Nossos favoritos</h2>
+                    <p class="section-subtitle">
+                        Escolha seu café e aproveite o clima do Bloom Coffee.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <article class="feature-card">
+                            <img src="/static/img/sobremesa1.jpg" alt="Café espresso servido em xícara">
+                            <div class="card-body">
+                                <h3>☕ Chocolate Quente Felpudo</h3>
+                                <p class="text-muted">
+
+                                    servido bem quentinho.
+                                    Finalizado com uma delicada espuma de leite,
+                                    decorada artesanalmente com charmosos rostinhos de gatinhos.
+                                    Uma dose extra de aconchego em cada colherada. 🐱
+                                </p>
+                              
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-md-4">
+                        <article class="feature-card">
+                            <img src="/static/img/sobremesa2.jpg" alt="Cappuccino cremoso">
+                            <div class="card-body">
+                                <h3>🍓 Gatinho de Morango</h3>
+                                <p class="text-muted">
+
+                                    Camadas de bolo macio, creme aveludado e deliciosos morangos, finalizadas com
+                                    chantilly e um charmoso gatinho de bolo. Uma sobremesa cremosa, delicada e
+                                    irresistível! 🐱🍓
+                                </p>
+                              
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-md-4">
+                        <article class="feature-card">
+                            <img src="/static/img/sobremesa3.jpg" alt="Doces e café em mesa">
+                            <div class="card-body">
+                                <h3>🍨 Gatinhos Gelados</h3>
+                                <p class="text-muted">
+                                    
+                                    Uma deliciosa seleção de sorvetes cremosos em formatos de gatinhos, com sabores
+                                    variados e coberturas irresistíveis. Uma sobremesa refrescante, divertida e perfeita
+                                    para os amantes de doces! 🐱🍦✨
+                                </p>
+                            
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pedidos" class="container py-5 my-4">
+            <div class="cta-section text-center p-5">
+                <h2 class="display-6 fw-bold">Pronto para viver essa experiência?</h2>
+                <p class="lead mb-4">
+                    Faça seu pedido e receba todo o sabor do Bloom Coffee.
+                </p>
+                <a href="/templates/pedidos.html" class="btn btn-coffee">Pedir agora</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-4">
+        <div class="container text-center">
+            <p class="mb-1 fw-bold">Bloom Coffee ☕🐈</p>
+            <small>Um espaço feito para pessoas e gatos apaixonados por café.</small>
+        </div>
+    </footer>
+
+   li
+
+
+</body>
+
+</html>

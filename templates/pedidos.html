@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos | Bloom Coffee</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+        crossorigin="anonymous">
+
+    <style>
+        :root {
+            --marrom: #3b2118;
+            --marrom-claro: #8b5e46;
+            --creme: #fff8ef;
+            --laranja: #d98b5f;
+            --bege: #f2dfce;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--creme);
+            color: var(--marrom);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .navbar {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 6px rgba(59, 33, 24, 0.8);
+        }
+
+        .navbar-brand span {
+            color: var(--laranja);
+        }
+
+        .nav-link {
+            color: #fff !important;
+            margin-left: 1rem;
+            font-weight: 500;
+            text-shadow: 2px 2px 6px rgba(59, 33, 24, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--laranja) !important;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .page-header {
+            min-height: 360px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 1rem 2rem;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+                url("https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1800&q=85")
+                center / cover no-repeat;
+            color: #fff;
+        }
+
+        .page-header-content {
+            width: min(850px, 100%);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: #fff;
+            font-size: clamp(2.4rem, 6vw, 4.5rem);
+            font-weight: 800;
+            text-shadow: 2px 2px 8px rgba(59, 33, 24, 0.9);
+        }
+
+        .page-header p {
+            color: #fff;
+            font-size: 1.15rem;
+            text-shadow: 2px 2px 6px rgba(59, 33, 24, 0.9);
+        }
+
+        .section-title {
+            color: var(--marrom);
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            color: var(--marrom-claro);
+        }
+
+        .product-card {
+            height: 100%;
+            overflow: hidden;
+            border: 1px solid var(--bege);
+            border-radius: 20px;
+            background-color: #fff;
+            box-shadow: 0 8px 24px rgba(59, 33, 24, 0.10);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 32px rgba(59, 33, 24, 0.18);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+        }
+
+        .product-card .card-body {
+            padding: 1.4rem;
+        }
+
+        .product-card h3 {
+            color: var(--marrom);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .product-description {
+            min-height: 48px;
+            color: var(--marrom-claro);
+        }
+
+        .product-price {
+            color: var(--laranja);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .btn-coffee {
+            border: 2px solid var(--laranja) !important;
+            border-radius: 50px;
+            background-color: transparent !important;
+            color: var(--marrom) !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-coffee:hover {
+            border-color: var(--laranja) !important;
+            background-color: transparent !important;
+            color: var(--laranja) !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-order {
+            border: 2px solid var(--laranja);
+            border-radius: 50px;
+            background-color: var(--laranja);
+            color: #fff;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-order:hover {
+            border-color: var(--laranja);
+            background-color: transparent;
+            color: var(--laranja);
+        }
+
+        .form-section,
+        .cart-summary {
+            background-color: #fff;
+            border: 1px solid var(--bege);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(59, 33, 24, 0.08);
+        }
+
+        .form-label {
+            color: var(--marrom);
+            font-weight: 600;
+        }
+
+        .form-control,
+        .form-select {
+            border: 1px solid var(--bege);
+            border-radius: 10px;
+            color: var(--marrom);
+            background-color: #fff;
+        }
+
+        .form-control::placeholder {
+            color: var(--marrom-claro);
+            opacity: 0.7;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--laranja);
+            box-shadow: 0 0 0 0.2rem rgba(217, 139, 95, 0.25);
+        }
+
+        .questionnaire {
+            background-color: var(--bege);
+            border-radius: 20px;
+        }
+
+        .questionnaire h3,
+        .questionnaire p,
+        .questionnaire label {
+            color: var(--marrom);
+        }
+
+        .cart-item {
+            border-bottom: 1px solid var(--bege);
+            padding: 1rem 0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-control button {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border: 1px solid var(--laranja);
+            border-radius: 50%;
+            background-color: transparent;
+            color: var(--marrom);
+        }
+
+        .quantity-control button:hover {
+            background-color: var(--laranja);
+            color: #fff;
+        }
+
+        .empty-cart {
+            color: var(--marrom-claro);
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .order-total {
+            border-top: 2px solid var(--bege);
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+
+        .offcanvas {
+            background-color: var(--creme);
+            color: var(--marrom);
+        }
+
+        .offcanvas-header {
+            border-bottom: 1px solid var(--bege);
+        }
+
+        footer {
+            background-color: var(--bege);
+            color: var(--marrom);
+            border-top: 1px solid var(--bege);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container py-2">
+                <a class="navbar-brand" href="index.html">
+                    Bloom <span>☕</span> Coffee
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#menuPrincipal" aria-controls="menuPrincipal"
+                    aria-expanded="false" aria-label="Abrir menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menuPrincipal">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="produtos.html">Produtos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="pedidos.html">Pedidos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="page-header">
+            <div class="page-header-content">
+                <span class="text-uppercase fw-bold" style="color: var(--laranja);">Bloom Coffee</span>
+                <h1 class="mt-2">Monte seu pedido</h1>
+                <p class="mb-0">
+                    Escolha seus produtos favoritos e receba uma experiência deliciosa
+                    no conforto da sua casa.
+                </p>
+            </div>
+        </section>
+
+        <section class="container py-5">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                <div>
+                    <h2 class="section-title mb-1">Produtos disponíveis</h2>
+                    <p class="section-subtitle mb-0">
+                        Adicione suas delícias favoritas ao carrinho.
+                    </p>
+                </div>
+
+                <button class="btn btn-order mt-3 mt-md-0" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#carrinhoOffcanvas">
+                    🛒 Carrinho
+                    <span id="cartBadge" class="badge text-bg-light ms-1">0</span>
+                </button>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85"
+                            alt="Café espresso">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Espresso Bloom</h3>
+                            <p class="product-description">
+                                Café intenso e encorpado preparado com grãos selecionados.
+                            </p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 8,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto"
+                                    data-id="espresso"
+                                    data-name="Espresso Bloom"
+                                    data-price="8.90"
+                                    data-image="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85"
+                            alt="Cappuccino">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Cappuccino Gatíneo</h3>
+                            <p class="product-description">
+                                Cappuccino cremoso com leite vaporizado e canela.
+                            </p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 14,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto"
+                                    data-id="cappuccino"
+                                    data-name="Cappuccino Gatíneo"
+                                    data-price="14.90"
+                                    data-image="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/static/img/donout.jpg"
+                            alt="Donut">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Donut Miaumix</h3>
+                            <p class="product-description">
+                                Donut macio com cobertura especial e confeitos coloridos.
+                            </p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 9,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto"
+                                    data-id="donut"
+                                    data-name="Donut Miaumix"
+                                    data-price="9.90"
+                                    data-image="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/static/img/bolo_gato.jpg"
+                            alt="Bolo">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Bolo Bigodes</h3>
+                            <p class="product-description">
+                                Bolo de chocolate com recheio de ganache de chocolate, acompanhado de um milk shake de chocolate.
+                            </p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 24,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto"
+                                    data-id="bolo"
+                                    data-name="Bolo Bigodes"
+                                    data-price="16.90"
+                                    data-image="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/static/img/sanduishe.jpg"
+                            alt="Cheesecake">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Sanduíche</h3>
+                            <p class="product-description">
+                                Pão de forma rosa, recheio de chantilly com morango e uva verde.
+                            </p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 18,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto"
+                                    data-id="cheesecake"
+                                    data-name="Cheesecake Patinhas"
+                                    data-price="18.90"
+                                    data-image="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/static/img/salgado1.jpg"
+                            alt="Sanduíche">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Sanduíche Gatuno</h3>
+                            <p class="product-description">
+                                    Pão artesanal, queijo, frango frito, salada e recheio especial da casa.
+                            </p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 22,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto"
+                                    data-id="sanduiche"
+                                    data-name="Sanduíche Gatuno"
+                                    data-price="22.90"
+                                    data-image="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="container pb-5">
+            <div class="form-section p-4 p-md-5">
+                <div class="mb-4">
+                    <h2 class="section-title">Informações para entrega</h2>
+                    <p class="section-subtitle mb-0">
+                        Preencha seus dados para que possamos preparar seu pedido.
+                    </p>
+                </div>
+
+                <form id="pedidoForm" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="nome" class="form-label">Nome completo</label>
+                            <input type="text" class="form-control" id="nome" placeholder="Digite seu nome" required>
+                            <div class="invalid-feedback">Informe seu nome completo.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="telefone" class="form-label">Telefone</label>
+                            <input type="tel" class="form-control" id="telefone" placeholder="(00) 00000-0000" required>
+                            <div class="invalid-feedback">Informe seu telefone.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="email" placeholder="seuemail@exemplo.com" required>
+                            <div class="invalid-feedback">Informe um e-mail válido.</div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <label for="rua" class="form-label">Rua ou avenida</label>
+                            <input type="text" class="form-control" id="rua" placeholder="Nome da rua ou avenida" required>
+                            <div class="invalid-feedback">Informe o endereço.</div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="numero" class="form-label">Número</label>
+                            <input type="text" class="form-control" id="numero" placeholder="Número" required>
+                            <div class="invalid-feedback">Informe o número.</div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label for="complemento" class="form-label">Complemento</label>
+                            <input type="text" class="form-control" id="complemento" placeholder="Apartamento, bloco, casa...">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="bairro" class="form-label">Bairro</label>
+                            <input type="text" class="form-control" id="bairro" placeholder="Seu bairro" required>
+                            <div class="invalid-feedback">Informe o bairro.</div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="cep" class="form-label">CEP</label>
+                            <input type="text" class="form-control" id="cep" placeholder="00000-000" required>
+                            <div class="invalid-feedback">Informe o CEP.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="cidade" class="form-label">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" placeholder="Sua cidade" required>
+                            <div class="invalid-feedback">Informe a cidade.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="pagamento" class="form-label">Forma de pagamento</label>
+                            <select class="form-select" id="pagamento" required>
+                                <option value="" selected disabled>Selecione uma opção</option>
+                                <option value="pix">Pix</option>
+                                <option value="cartao">Cartão na entrega</option>
+                                <option value="dinheiro">Dinheiro</option>
+                            </select>
+                            <div class="invalid-feedback">Escolha uma forma de pagamento.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="observacoes" class="form-label">Observações do pedido</label>
+                            <textarea class="form-control" id="observacoes" rows="3"
+                                placeholder="Ex.: retirar algum ingrediente ou adicionar talher"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="questionnaire p-4 mt-4">
+                        <h3 class="h5 mb-3">Conte um pouco sobre sua experiência</h3>
+
+                        <p class="mb-2 fw-semibold">É sua primeira visita ao Bloom Coffee?</p>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="primeiraVisita" id="visitaSim" value="sim" required>
+                            <label class="form-check-label" for="visitaSim">Sim</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="primeiraVisita" id="visitaNao" value="nao">
+                            <label class="form-check-label" for="visitaNao">Não</label>
+                        </div>
+
+                        <p class="mb-2 mt-4 fw-semibold">Como conheceu a cafeteria?</p>
+                        <select class="form-select" id="origem" required>
+                            <option value="" selected disabled>Selecione uma opção</option>
+                            <option>Redes sociais</option>
+                            <option>Indicação de amigos</option>
+                            <option>Pesquisa na internet</option>
+                            <option>Já conhecia o local</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione uma opção.</div>
+
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" type="checkbox" id="termos" required>
+                            <label class="form-check-label" for="termos">
+                                Confirmo que os dados informados estão corretos.
+                            </label>
+                            <div class="invalid-feedback">Você precisa confirmar os dados.</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-order btn-lg w-100 mt-4" type="submit">
+                        Finalizar pedido
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-4">
+        <div class="container text-center">
+            <p class="mb-1 fw-bold">Bloom Coffee ☕🐈</p>
+            <small>Um espaço feito para pessoas e gatos apaixonados por café.</small>
+        </div>
+    </footer>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="carrinhoOffcanvas" aria-labelledby="carrinhoTitulo">
+        <div class="offcanvas-header">
+            <h2 class="offcanvas-title h4" id="carrinhoTitulo">Seu carrinho 🛒</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="cartItems">
+                <div class="empty-cart">Seu carrinho está vazio.</div>
+            </div>
+
+            <div class="order-total">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <strong id="cartSubtotal">R$ 0,00</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Entrega</span>
+                    <strong id="cartDelivery">R$ 5,00</strong>
+                </div>
+
+                <div class="d-flex justify-content-between fs-5">
+                    <strong>Total</strong>
+                    <strong id="cartTotal">R$ 0,00</strong>
+                </div>
+
+                <button class="btn btn-order w-100 mt-4" data-bs-dismiss="offcanvas">
+                    Continuar pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sucessoModal" tabindex="-1" aria-labelledby="sucessoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4">
+                <div class="modal-body text-center p-5">
+                    <div class="display-3 mb-3">🐈</div>
+                    <h2 class="h3" id="sucessoModalLabel">Pedido recebido!</h2>
+                    <p class="text-muted">
+                        Obrigado por pedir no Bloom Coffee. Seu pedido será preparado com muito carinho.
+                    </p>
+                    <button type="button" class="btn btn-order px-4" data-bs-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const carrinho = [];
+        const cartItems = document.getElementById("cartItems");
+        const cartBadge = document.getElementById("cartBadge");
+        const cartSubtotal = document.getElementById("cartSubtotal");
+        const cartTotal = document.getElementById("cartTotal");
+        const taxaEntrega = 5;
+
+        function formatarMoeda(valor) {
+            return valor.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        }
+
+        function atualizarCarrinho() {
+            cartItems.innerHTML = "";
+
+            if (carrinho.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">Seu carrinho está vazio.</div>
+                `;
+
+                cartBadge.textContent = "0";
+                cartSubtotal.textContent = "R$ 0,00";
+                cartTotal.textContent = "R$ 0,00";
+                return;
+            }
+
+            let subtotal = 0;
+            let quantidadeTotal = 0;
+
+            carrinho.forEach((produto, index) => {
+                const totalProduto = produto.price * produto.quantity;
+
+                subtotal += totalProduto;
+                quantidadeTotal += produto.quantity;
+
+                const item = document.createElement("div");
+                item.className = "cart-item";
+
+                item.innerHTML = `
+                    <div class="d-flex gap-3">
+                        <img src="${produto.image}" alt="${produto.name}">
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between gap-2">
+                                <strong>${produto.name}</strong>
+                                <button class="btn btn-sm text-danger p-0"
+                                    onclick="removerProduto(${index})"
+                                    aria-label="Remover ${produto.name}">
+                                    ×
+                                </button>
+                            </div>
+
+                            <small class="text-muted">${formatarMoeda(produto.price)} cada</small>
+
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="quantity-control">
+                                    <button onclick="alterarQuantidade(${index}, -1)">−</button>
+                                    <span>${produto.quantity}</span>
+                                    <button onclick="alterarQuantidade(${index}, 1)">+</button>
+                                </div>
+
+                                <strong>${formatarMoeda(totalProduto)}</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                cartItems.appendChild(item);
+            });
+
+            cartBadge.textContent = quantidadeTotal;
+            cartSubtotal.textContent = formatarMoeda(subtotal);
+            cartTotal.textContent = formatarMoeda(subtotal + taxaEntrega);
+        }
+
+        function adicionarProduto(produto) {
+            const produtoExistente = carrinho.find(item => item.id === produto.id);
+
+            if (produtoExistente) {
+                produtoExistente.quantity++;
+            } else {
+                carrinho.push({ ...produto, quantity: 1 });
+            }
+
+            atualizarCarrinho();
+        }
+
+        function alterarQuantidade(index, quantidade) {
+            carrinho[index].quantity += quantidade;
+
+            if (carrinho[index].quantity <= 0) {
+                carrinho.splice(index, 1);
+            }
+
+            atualizarCarrinho();
+        }
+
+        function removerProduto(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinho();
+        }
+
+        document.querySelectorAll(".adicionar-produto").forEach(botao => {
+            botao.addEventListener("click", () => {
+                const produto = {
+                    id: botao.dataset.id,
+                    name: botao.dataset.name,
+                    price: Number(botao.dataset.price),
+                    image: botao.dataset.image
+                };
+
+                adicionarProduto(produto);
+
+                botao.textContent = "Adicionado ✓";
+
+                setTimeout(() => {
+                    botao.textContent = "Adicionar";
+                }, 1200);
+            });
+        });
+
+        const pedidoForm = document.getElementById("pedidoForm");
+
+        pedidoForm.addEventListener("submit", event => {
+            event.preventDefault();
+
+            if (carrinho.length === 0) {
+                alert("Adicione pelo menos um produto ao carrinho.");
+                return;
+            }
+
+            if (!pedidoForm.checkValidity()) {
+                event.stopPropagation();
+                pedidoForm.classList.add("was-validated");
+                return;
+            }
+
+            pedidoForm.classList.add("was-validated");
+
+            const modal = new bootstrap.Modal(document.getElementById("sucessoModal"));
+            modal.show();
+
+            pedidoForm.reset();
+            pedidoForm.classList.remove("was-validated");
+
+            carrinho.length = 0;
+            atualizarCarrinho();
+        });
+
+        atualizarCarrinho();
+    </script>
+
+</body>
+
+</html>
