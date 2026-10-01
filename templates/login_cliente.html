@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Bloom Coffee</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --creme: #fdf3ea;
+      --bege: #f3dfcf;
+      --laranja: #d89257;
+      --laranja-escuro: #b66d38;
+      --marrom: #4b2c20;
+      --rosa: #f7dfe2;
+      --rosa-escuro: #ebbec4;
+      --branco: #ffffff;
+      --cinza: #6e5650;
+      --sombra: rgba(115, 74, 54, 0.16);
+      --linha: rgba(182, 109, 56, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Nunito", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.8), transparent 22%),
+        linear-gradient(135deg, #fffaf5 0%, #f8e9dd 38%, #f1d3bf 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .login-shell {
+      width: min(1100px, 100%);
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(214, 160, 116, 0.2);
+      border-radius: 30px;
+      box-shadow: 0 28px 60px var(--sombra);
+      overflow: hidden;
+    }
+
+    .login-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      min-height: 680px;
+    }
+
+    .brand-panel {
+      position: relative;
+      padding: 34px 32px 42px;
+      background:
+        linear-gradient(150deg, rgba(184, 109, 56, 0.92), rgba(140, 80, 47, 0.90)),
+        url("https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80") center/cover;
+      color: var(--branco);
+    }
+
+    .brand-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.12));
+    }
+
+    .brand-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.2);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .mini-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.18);
+      font-size: 0.9rem;
+    }
+
+    .brand-content {
+      margin-top: 90px;
+    }
+
+    .emoji {
+      display: inline-block;
+      font-size: 4rem;
+      margin-bottom: 12px;
+      animation: float 2.7s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .brand-content h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.2rem, 2.2vw, 3.1rem);
+      line-height: 1.08;
+      font-weight: 800;
+    }
+
+    .brand-content p {
+      margin: 0;
+      max-width: 420px;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .brand-card {
+      margin-top: 42px;
+      max-width: 420px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .brand-card strong {
+      display: block;
+      font-size: 1.12rem;
+      margin-bottom: 4px;
+    }
+
+    .brand-card span {
+      color: rgba(255,255,255,0.84);
+      font-size: 0.96rem;
+    }
+
+    .form-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(252,247,243,0.96));
+      padding: 46px 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-box {
+      width: min(100%, 430px);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--laranja-escuro);
+    }
+
+    .form-top h2 {
+      margin: 0;
+      font-size: clamp(2rem, 2vw, 2.7rem);
+      font-weight: 800;
+      color: var(--marrom);
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--cinza);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    form {
+      margin-top: 28px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--marrom);
+      font-weight: 700;
+      font-size: 0.97rem;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap span {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.05rem;
+      opacity: 0.8;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      border: 1.5px solid rgba(191, 134, 87, 0.23);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.7);
+      padding: 14px 16px 14px 46px;
+      font-size: 1rem;
+      color: var(--marrom);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--laranja);
+      box-shadow: 0 0 0 4px rgba(216, 146, 87, 0.12);
+      background: var(--branco);
+    }
+
+    .options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 8px 0 22px;
+    }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: var(--cinza);
+      cursor: pointer;
+    }
+
+    .check input {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--laranja-escuro);
+      margin: 0;
+    }
+
+    .link-text {
+      color: var(--laranja-escuro);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .link-text:hover {
+      text-decoration: underline;
+    }
+
+    .btn-primary-custom {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 15px 18px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--laranja) 0%, var(--laranja-escuro) 100%);
+      color: var(--branco);
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 16px 30px rgba(182, 109, 56, 0.26);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary-custom:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 34px rgba(182, 109, 56, 0.3);
+      color: var(--branco);
+      text-decoration: none;
+    }
+
+    .divider {
+      position: relative;
+      margin: 28px 0 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8a6a5d;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 38%;
+      height: 1px;
+      background: rgba(138, 106, 93, 0.3);
+    }
+
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+
+    .socials {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 12px;
+      border: 1px solid var(--linha);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.72);
+      color: var(--marrom);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(75, 44, 32, 0.06);
+      text-decoration: none;
+      color: var(--marrom);
+    }
+
+    .signup-box {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(138, 106, 93, 0.16);
+      text-align: center;
+      color: var(--cinza);
+      font-size: 0.98rem;
+    }
+
+    .signup-box a {
+      color: var(--laranja-escuro);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .signup-box a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .login-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-panel {
+        min-height: 300px;
+      }
+
+      .brand-content {
+        margin-top: 52px;
+      }
+
+      .form-panel {
+        padding: 34px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+    <div class="login-grid">
+      <aside class="brand-panel">
+        <div class="brand-top">
+          <div class="brand-pill">
+            <span class="mini-badge">☕</span>
+            Bloom Coffee
+          </div>
+        </div>
+
+        <div class="brand-content">
+          <div class="emoji">🐾</div>
+          <h1>Que bom te ver por aqui!</h1>
+          <p>
+            Acesse sua conta e aproveite seus cafés favoritos, receitas especiais e
+            o melhor lugar para pedir com a cara do seu gatinho.
+          </p>
+
+          <div class="brand-card">
+            <strong>Seu café favorito, a um clique.</strong>
+            <span>Faça pedidos, acompanhe e personalize tudo com carinho.</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="form-panel">
+        <div class="form-box">
+          <div class="form-top">
+            <span class="eyebrow">Cliente</span>
+            <h2>Entrar</h2>
+            <p class="subtitle">Acesse sua conta para continuar suas escolhas preferidas.</p>
+          </div>
+
+          <form action="/templates/pedidos.html" method="post">
+            <div class="field">
+              <label for="email">E-mail</label>
+              <div class="input-wrap">
+                <span>✉️</span>
+                <input id="email" type="email" placeholder="seuemail@exemplo.com" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="senha">Senha</label>
+              <div class="input-wrap">
+                <span>🔒</span>
+                <input id="senha" type="password" placeholder="Digite sua senha" required />
+              </div>
+            </div>
+
+            <div class="options-row">
+              <label class="check">
+                <input type="checkbox" />
+                <span>Lembrar de mim</span>
+              </label>
+              <a href="#" class="link-text">Esqueci a senha</a>
+            </div>
+
+            <button type="submit" class="btn-primary-custom">Entrar</button>
+          </form>
+
+          <div class="divider">ou</div>
+
+          <div class="socials">
+            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_CLIENT_ID&redirect_uri=http://localhost:3000/auth/google/callback&response_type=code&scope=openid%20email%20profile" class="social-btn">🟢 Google</a>
+            <a href="https://www.facebook.com/v18.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=http://localhost:3000/auth/facebook/callback&scope=email,public_profile" class="social-btn">🔵 Facebook</a>
+          </div>
+
+          <div class="signup-box">
+            Ainda não tem conta? <a href="/templates/registro.html">Criar conta</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Script para integração OAuth
+    // Certifique-se de substituir YOUR_GOOGLE_CLIENT_ID e YOUR_FACEBOOK_APP_ID pelos seus IDs reais
+  </script>
+</body>
+</html>
