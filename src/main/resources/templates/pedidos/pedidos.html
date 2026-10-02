@@ -8,286 +8,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
 
-    <style>
-        :root {
-            --marrom: #3b2118;
-            --marrom-claro: #8b5e46;
-            --creme: #fff8ef;
-            --laranja: #d98b5f;
-            --bege: #f2dfce;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--creme);
-            color: var(--marrom);
-            font-family: "Segoe UI", sans-serif;
-        }
-
-        header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 10;
-        }
-
-        .navbar {
-            background-color: transparent !important;
-            box-shadow: none !important;
-        }
-
-        .navbar-brand {
-            color: #fff !important;
-            font-size: 1.6rem;
-            font-weight: 700;
-            text-shadow: 2px 2px 6px rgba(59, 33, 24, 0.8);
-        }
-
-        .navbar-brand span {
-            color: var(--laranja);
-        }
-
-        .nav-link {
-            color: #fff !important;
-            margin-left: 1rem;
-            font-weight: 500;
-            text-shadow: 2px 2px 6px rgba(59, 33, 24, 0.8);
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--laranja) !important;
-        }
-
-        .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.8);
-        }
-
-        .page-header {
-            min-height: 360px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5rem 1rem 2rem;
-            background:
-                linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-                url("https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1800&q=85") center / cover no-repeat;
-            color: #fff;
-        }
-
-        .page-header-content {
-            width: min(850px, 100%);
-            text-align: center;
-        }
-
-        .page-header h1 {
-            color: #fff;
-            font-size: clamp(2.4rem, 6vw, 4.5rem);
-            font-weight: 800;
-            text-shadow: 2px 2px 8px rgba(59, 33, 24, 0.9);
-        }
-
-        .page-header p {
-            color: #fff;
-            font-size: 1.15rem;
-            text-shadow: 2px 2px 6px rgba(59, 33, 24, 0.9);
-        }
-
-        .section-title {
-            color: var(--marrom);
-            font-weight: 700;
-        }
-
-        .section-subtitle {
-            color: var(--marrom-claro);
-        }
-
-        .product-card {
-            height: 100%;
-            overflow: hidden;
-            border: 1px solid var(--bege);
-            border-radius: 20px;
-            background-color: #fff;
-            box-shadow: 0 8px 24px rgba(59, 33, 24, 0.10);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 32px rgba(59, 33, 24, 0.18);
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 210px;
-            object-fit: cover;
-        }
-
-        .product-card .card-body {
-            padding: 1.4rem;
-        }
-
-        .product-card h3 {
-            color: var(--marrom);
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .product-description {
-            min-height: 48px;
-            color: var(--marrom-claro);
-        }
-
-        .product-price {
-            color: var(--laranja);
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .btn-coffee {
-            border: 2px solid var(--laranja) !important;
-            border-radius: 50px;
-            background-color: transparent !important;
-            color: var(--marrom) !important;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-coffee:hover {
-            border-color: var(--laranja) !important;
-            background-color: transparent !important;
-            color: var(--laranja) !important;
-            transform: translateY(-2px);
-        }
-
-        .btn-order {
-            border: 2px solid var(--laranja);
-            border-radius: 50px;
-            background-color: var(--laranja);
-            color: #fff;
-            font-weight: 700;
-            transition: all 0.3s ease;
-        }
-
-        .btn-order:hover {
-            border-color: var(--laranja);
-            background-color: transparent;
-            color: var(--laranja);
-        }
-
-        .form-section,
-        .cart-summary {
-            background-color: #fff;
-            border: 1px solid var(--bege);
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(59, 33, 24, 0.08);
-        }
-
-        .form-label {
-            color: var(--marrom);
-            font-weight: 600;
-        }
-
-        .form-control,
-        .form-select {
-            border: 1px solid var(--bege);
-            border-radius: 10px;
-            color: var(--marrom);
-            background-color: #fff;
-        }
-
-        .form-control::placeholder {
-            color: var(--marrom-claro);
-            opacity: 0.7;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: var(--laranja);
-            box-shadow: 0 0 0 0.2rem rgba(217, 139, 95, 0.25);
-        }
-
-        .questionnaire {
-            background-color: var(--bege);
-            border-radius: 20px;
-        }
-
-        .questionnaire h3,
-        .questionnaire p,
-        .questionnaire label {
-            color: var(--marrom);
-        }
-
-        .cart-item {
-            border-bottom: 1px solid var(--bege);
-            padding: 1rem 0;
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .cart-item img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 12px;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .quantity-control button {
-            width: 28px;
-            height: 28px;
-            padding: 0;
-            border: 1px solid var(--laranja);
-            border-radius: 50%;
-            background-color: transparent;
-            color: var(--marrom);
-        }
-
-        .quantity-control button:hover {
-            background-color: var(--laranja);
-            color: #fff;
-        }
-
-        .empty-cart {
-            color: var(--marrom-claro);
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        .order-total {
-            border-top: 2px solid var(--bege);
-            margin-top: 1rem;
-            padding-top: 1rem;
-        }
-
-        .offcanvas {
-            background-color: var(--creme);
-            color: var(--marrom);
-        }
-
-        .offcanvas-header {
-            border-bottom: 1px solid var(--bege);
-        }
-
-        footer {
-            background-color: var(--bege);
-            color: var(--marrom);
-            border-top: 1px solid var(--bege);
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/pedidos.css}">
 </head>
 
 <body>
@@ -295,7 +18,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container py-2">
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" th:href="@{/}">
                     Bloom <span>☕</span> Coffee
                 </a>
 
@@ -307,13 +30,13 @@
                 <div class="collapse navbar-collapse" id="menuPrincipal">
                     <ul class="navbar-nav ms-auto align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link" href="/index.html">Home</a>
+                            <a class="nav-link" th:href="@{/}" >Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="produtos.html">Produtos</a>
+                            <a class="nav-link" th:href="@{/produtos}">Produtos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="pedidos.html">Pedidos</a>
+                            <a class="nav-link active" th:href="@{/pedidos}">Pedidos</a>
                         </li>
                     </ul>
                 </div>
@@ -395,7 +118,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/chadecamomila.jpg" alt="chadecamomila">
+                        <img src="/img/chadecamomila.jpg" alt="chadecamomila">
                         <div class="card-body d-flex flex-column">
                             <h3>Chá de Camomila</h3>
                             <p class="product-description">
@@ -415,7 +138,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/cafegelado.jpg" alt="cafegelado">
+                        <img src="/img/cafegelado.jpg" alt="cafegelado">
                         <div class="card-body d-flex flex-column">
                             <h3>Café Gelado</h3>
                             <p class="product-description">
@@ -435,7 +158,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/aguacomgas.jpg" alt="Aguacomgas">
+                        <img src="/img/aguacomgas.jpg" alt="Aguacomgas">
                         <div class="card-body d-flex flex-column">
                             <h3>Água com Gás</h3>
                             <p class="product-description">
@@ -455,7 +178,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/coca.jpg" alt="Coca Cola zero">
+                        <img src="/img/coca.jpg" alt="Coca Cola zero">
                         <div class="card-body d-flex flex-column">
                             <h3>Coca Cola zero</h3>
                             <p class="product-description">
@@ -475,7 +198,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/cookies.jpg" alt="Cookies">
+                        <img src="/img/cookies.jpg" alt="Cookies">
                         <div class="card-body d-flex flex-column">
                             <h3>Cookies de Gatinhos</h3>
                             <p class="product-description">
@@ -495,7 +218,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/browines.jpg" alt="Brownies">
+                        <img src="/img/browines.jpg" alt="Brownies">
                         <div class="card-body d-flex flex-column">
                             <h3>Brownies</h3>
                             <p class="product-description">
@@ -515,7 +238,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/salgado1.jpg" alt="Sanduíche">
+                        <img src="/img/salgado1.jpg" alt="Sanduíche">
                         <div class="card-body d-flex flex-column">
                             <h3>Sanduíche de Gatinhos</h3>
                             <p class="product-description">
@@ -535,7 +258,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/mistoquente.jpg" alt="Misto Quente">
+                        <img src="/img/mistoquente.jpg" alt="Misto Quente">
                         <div class="card-body d-flex flex-column">
                             <h3>Misto Quente</h3>
                             <p class="product-description">
@@ -555,7 +278,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/panqueca.jpg" alt="Panqueca">
+                        <img src="/img/panqueca.jpg" alt="Panqueca">
                         <div class="card-body d-flex flex-column">
                             <h3>Lanche Panqueca</h3>
                             <p class="product-description">
@@ -575,7 +298,7 @@
 
                 <div class="col-sm-6 col-lg-4">
                     <article class="card product-card">
-                        <img src="/static/img/pudim.jpg" alt="Pudim">
+                        <img src="/img/pudim.jpg" alt="Pudim">
                         <div class="card-body d-flex flex-column">
                             <h3>Pudim</h3>
                             <p class="product-description">

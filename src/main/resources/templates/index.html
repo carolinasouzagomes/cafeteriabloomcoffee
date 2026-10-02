@@ -1,17 +1,18 @@
+
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Bloom Coffee</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <style>
         .navbar-login-icon {
             font-size: 1.3rem;
@@ -40,249 +41,249 @@
 
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container py-2">
-                <a class="navbar-brand" href="/index.html">
-                    Bloom <span>☕</span> Coffee
-                </a>
+<header class="principal">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container py-2">
+            <a class="navbar-brand" th:href="@{/}">
+                Bloom <span>☕</span> Coffee
+            </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
                     aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="menuPrincipal">
-                    <ul class="navbar-nav ms-auto align-items-lg-center">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/index.html">Ìnicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/templates/produtos.html">produto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/templates/pedidos.html">pedidos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#historia">Nossa História</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#localizacao">Localização</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="navbar-login-link" href="/templates/login-access.html" title="Fazer login">
-                                <i class="fas fa-user-circle navbar-login-icon"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/produtos}">produto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/pedidos}">pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#historia">Nossa História</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#localizacao">Localização</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navbar-login-link" th:href="@{/login}" title="Fazer login">
+                            <i class="fas fa-user-circle navbar-login-icon"></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 
-    <main>
-        <section id="inicio">
-            <div id="carouselBloom" class="carousel slide hero-carousel" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="0" class="active"
+<main>
+    <section id="inicio">
+        <div id="carouselBloom" class="carousel slide hero-carousel" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="0" class="active"
                         aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="1"
+                <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="1"
                         aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="2"
+                <button type="button" data-bs-target="#carouselBloom" data-bs-slide-to="2"
                         aria-label="Slide 3"></button>
-                </div>
-
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="/static/img/foto_cafeteria.jpg" alt="Café e gatos em ambiente acolhedor">
-                        <div class="carousel-caption">
-                            <h1>Café, gatos e aconchego</h1>
-                            <p>Um cantinho especial para você relaxar e aproveitar cada momento.</p>
-                            <a href="/templates/produtos.html" class="btn btn-coffee">Conheça nosso cardápio</a>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1800&q=85"
-                            alt="Cafeteria com café e ambiente moderno">
-                        <div class="carousel-caption">
-                            <h1>Sabores que aquecem</h1>
-                            <p>Cafés selecionados e preparados com carinho para você.</p>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <img src="/static/img/foto_cafe_gatinho.jpg" alt="Gato descansando em café">
-                        <div class="carousel-caption">
-                            <h1>Seu novo lugar favorito</h1>
-                            <p>Uma experiência única para amantes de café e gatos.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselBloom"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselBloom"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Próximo</span>
-                </button>
             </div>
-        </section>
 
-        <section class="container py-5 my-4">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6">
-                    <img class="about-image" src="/static/img/cafe_de_gato.jpg" alt="Gato em uma cafeteria acolhedora">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img th:src="@{/img/foto_cafeteria.jpg}" alt="Café e gatos em ambiente acolhedor">
+                    <div class="carousel-caption">
+                        <h1>Café, gatos e aconchego</h1>
+                        <p>Um cantinho especial para você relaxar e aproveitar cada momento.</p>
+                        <a th:href="@{/produtos}" class="btn btn-coffee">Conheça nosso cardápio</a>
+                    </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1800&q=85"
+                         alt="Cafeteria com café e ambiente moderno">
+                    <div class="carousel-caption">
+                        <h1>Sabores que aquecem</h1>
+                        <p>Cafés selecionados e preparados com carinho para você.</p>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <img th:src="@{/img/foto_cafe_gatinho.jpg}" alt="Gato descansando em café">
+                    <div class="carousel-caption">
+                        <h1>Seu novo lugar favorito</h1>
+                        <p>Uma experiência única para amantes de café e gatos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselBloom"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselBloom"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+    </section>
+
+    <section class="container py-5 my-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <img class="about-image" th:src="@{/img/cafe_de_gato.jpg}" alt="Gato em uma cafeteria acolhedora">
+            </div>
+
+            <div class="col-lg-6">
                     <span class="text-uppercase fw-bold small" style="color: var(--laranja);">
                         Uma experiência diferente
                     </span>
 
-                    <h2 class="section-title display-6 mt-2">
-                        Aqui fazemos com café quentinho e gostoso com a imagem do seu gatinho!
-                    </h2>
+                <h2 class="section-title display-6 mt-2">
+                    Aqui fazemos com café quentinho e gostoso com a imagem do seu gatinho!
+                </h2>
 
-                    <p class="section-subtitle mt-3">
-                        No Bloom Coffee, cada detalhe foi pensado para criar um ambiente acolhedor, descontraído e cheio
-                        de personalidade.
-                    </p>
+                <p class="section-subtitle mt-3">
+                    No Bloom Coffee, cada detalhe foi pensado para criar um ambiente acolhedor, descontraído e cheio
+                    de personalidade.
+                </p>
 
-                    <p>
-                        Aqui você pode trazer seu felino e pedir um café personalizado com a carinha dele!
-                    </p>
+                <p>
+                    Aqui você pode trazer seu felino e pedir um café personalizado com a carinha dele!
+                </p>
 
-                    <a href="#pedidos" class="btn btn-coffee mt-2">Faça seu pedido</a>
-                </div>
+                <a href="#pedidos" class="btn btn-coffee mt-2">Faça seu pedido</a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="historia" class="container py-5 my-4">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6">
+    <section id="historia" class="container py-5 my-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
                     <span class="text-uppercase fw-bold small" style="color: var(--laranja);">
                         Nossa Jornada
                     </span>
-                    <h2 class="section-title display-6 mt-2">
-                        A História do Bloom Coffee
-                    </h2>
-                    <p class="section-subtitle mt-3">
-                        Tudo começou com uma paixão compartilhada por dois grandes amores: café e gatos.
-                    </p>
-                    <p>
-                        Em 2020, a Bloom Coffee nasceu de um sonho simples: criar um espaço onde pessoas apaixonadas por
-                        café pudessem aproveitar uma bebida de qualidade enquanto compartilhavam momentos especiais com
-                        seus felinos.
-                    </p>
-                    <p>
-                        Começamos como um pequeno café com apenas 4 mesas e uma visão grande. Com dedicação e muito
-                        carinho, expandimos para um espaço acolhedor que comporta cômoda e seguramente nossos clientes
-                        felinos e humanos.
-                    </p>
-                    <p>
-                        Hoje, o Bloom Coffee é mais que um café - é um refúgio para amantes de café, um santuário para
-                        gatos, e uma comunidade de pessoas que compartilham a mesma paixão.
-                    </p>
-                </div>
-                <div class="col-lg-6">
-                    <img class="about-image" src="/static/img/foto_cafeteria.jpg"
-                        alt="Interior acolhedor do Bloom Coffee">
-                </div>
+                <h2 class="section-title display-6 mt-2">
+                    A História do Bloom Coffee
+                </h2>
+                <p class="section-subtitle mt-3">
+                    Tudo começou com uma paixão compartilhada por dois grandes amores: café e gatos.
+                </p>
+                <p>
+                    Em 2020, a Bloom Coffee nasceu de um sonho simples: criar um espaço onde pessoas apaixonadas por
+                    café pudessem aproveitar uma bebida de qualidade enquanto compartilhavam momentos especiais com
+                    seus felinos.
+                </p>
+                <p>
+                    Começamos como um pequeno café com apenas 4 mesas e uma visão grande. Com dedicação e muito
+                    carinho, expandimos para um espaço acolhedor que comporta cômoda e seguramente nossos clientes
+                    felinos e humanos.
+                </p>
+                <p>
+                    Hoje, o Bloom Coffee é mais que um café - é um refúgio para amantes de café, um santuário para
+                    gatos, e uma comunidade de pessoas que compartilham a mesma paixão.
+                </p>
             </div>
-        </section>
+            <div class="col-lg-6">
+                <img class="about-image" th:src="@{/img/foto_cafeteria.jpg}"
+                     alt="Interior acolhedor do Bloom Coffee">
+            </div>
+        </div>
+    </section>
 
-        <section id="localizacao" class="py-5" style="background-color: var(--bege);">
-            <div class="container">
-                <div class="text-center mb-5">
+    <section id="localizacao" class="py-5" style="background-color: var(--bege);">
+        <div class="container">
+            <div class="text-center mb-5">
                     <span class="text-uppercase fw-bold small" style="color: var(--laranja);">
                         Visite-nos
                     </span>
-                    <h2 class="section-title display-6 mt-2">Nossa Localização</h2>
-                    <p class="section-subtitle">
-                        Estamos esperando por você! Veja onde nos encontrar.
-                    </p>
-                </div>
+                <h2 class="section-title display-6 mt-2">Nossa Localização</h2>
+                <p class="section-subtitle">
+                    Estamos esperando por você! Veja onde nos encontrar.
+                </p>
+            </div>
 
-                <div class="row g-5">
-                    <div class="col-lg-6">
-                        <div style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                            <iframe
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <div style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                        <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1971097829056!2d-46.65393!3d-23.5505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0330b5%3A0x92f2d78b99999999!2sAvenida%20Paulista%2C%201000%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1234567890123"
                                 width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade">
-                            </iframe>
-                        </div>
+                        </iframe>
                     </div>
+                </div>
 
-                    <div class="col-lg-6">
-                        <div class="contact-info">
-                            <div class="mb-4">
-                                <h3 class="fw-bold mb-3">📍 Endereço</h3>
-                                <p class="lead">
-                                    Avenida Paulista, 1000<br>
-                                    Bela Vista - São Paulo, SP<br>
-                                    CEP: 01311-100<br>
-                                    Brasil
-                                </p>
-                            </div>
+                <div class="col-lg-6">
+                    <div class="contact-info">
+                        <div class="mb-4">
+                            <h3 class="fw-bold mb-3">📍 Endereço</h3>
+                            <p class="lead">
+                                Avenida Paulista, 1000<br>
+                                Bela Vista - São Paulo, SP<br>
+                                CEP: 01311-100<br>
+                                Brasil
+                            </p>
+                        </div>
 
-                            <div class="mb-4">
-                                <h3 class="fw-bold mb-3">☎️ Contato</h3>
-                                <p class="lead">
-                                    Telefone: <strong>(11) 3085-1000</strong><br>
-                                    WhatsApp: <strong>(11) 99999-8888</strong><br>
-                                    Email: <strong>contato@bloomcoffee.com.br</strong>
-                                </p>
-                            </div>
+                        <div class="mb-4">
+                            <h3 class="fw-bold mb-3">☎️ Contato</h3>
+                            <p class="lead">
+                                Telefone: <strong>(11) 3085-1000</strong><br>
+                                WhatsApp: <strong>(11) 99999-8888</strong><br>
+                                Email: <strong>contato@bloomcoffee.com.br</strong>
+                            </p>
+                        </div>
 
-                            <div class="mb-4">
-                                <h3 class="fw-bold mb-3">🕐 Horário de Funcionamento</h3>
-                                <p class="lead">
-                                    <strong>Segunda a Sexta:</strong> 08h00 - 22h00<br>
-                                    <strong>Sábado:</strong> 09h00 - 23h00<br>
-                                    <strong>Domingo:</strong> 09h00 - 21h00
-                                </p>
-                            </div>
+                        <div class="mb-4">
+                            <h3 class="fw-bold mb-3">🕐 Horário de Funcionamento</h3>
+                            <p class="lead">
+                                <strong>Segunda a Sexta:</strong> 08h00 - 22h00<br>
+                                <strong>Sábado:</strong> 09h00 - 23h00<br>
+                                <strong>Domingo:</strong> 09h00 - 21h00
+                            </p>
+                        </div>
 
-                            <div>
-                                <h3 class="fw-bold mb-3">🐱 Ambiente Pet-Friendly</h3>
-                                <p>
-                                    Seu gato é bem-vindo! Contamos com espaço climatizado, tigelas de água fresca e
-                                    muito espaço para que seus felinos fiquem confortáveis enquanto você desfruta de
-                                    um ótimo café.
-                                </p>
-                            </div>
+                        <div>
+                            <h3 class="fw-bold mb-3">🐱 Ambiente Pet-Friendly</h3>
+                            <p>
+                                Seu gato é bem-vindo! Contamos com espaço climatizado, tigelas de água fresca e
+                                muito espaço para que seus felinos fiquem confortáveis enquanto você desfruta de
+                                um ótimo café.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section id="pedidos" class="container py-5 my-4">
-            <div class="cta-section text-center p-5">
-                <h2 class="display-6 fw-bold">Pronto para viver essa experiência?</h2>
-                <p class="lead mb-4">
-                    Faça seu pedido e receba todo o sabor do Bloom Coffee.
-                </p>
-                <a href="/templates/pedidos.html" class="btn btn-coffee">Pedir agora</a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="py-4">
-        <div class="container text-center">
-            <p class="mb-1 fw-bold">Bloom Coffee ☕🐈</p>
-            <small>Um espaço feito para pessoas e gatos apaixonados por café.</small>
         </div>
-    </footer>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    <section id="pedidos" class="container py-5 my-4">
+        <div class="cta-section text-center p-5">
+            <h2 class="display-6 fw-bold">Pronto para viver essa experiência?</h2>
+            <p class="lead mb-4">
+                Faça seu pedido e receba todo o sabor do Bloom Coffee.
+            </p>
+            <a th:href="@{/pedidos}" class="btn btn-coffee">Pedir agora</a>
+        </div>
+    </section>
+</main>
+
+<footer class="py-4">
+    <div class="container text-center">
+        <p class="mb-1 fw-bold">Bloom Coffee ☕🐈</p>
+        <small>Um espaço feito para pessoas e gatos apaixonados por café.</small>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP8nrwvLv7aLm3z3zFm2x0Y1g1g6vZZZZZZ"
         crossorigin="anonymous"></script>
 

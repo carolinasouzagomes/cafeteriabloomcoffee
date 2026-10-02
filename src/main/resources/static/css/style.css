@@ -17,8 +17,23 @@
             font-family: "Segoe UI", sans-serif;
         }
 
+        .principal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: transparent;
+            z-index: 10;
+        }
+
         .navbar {
-            background-color: var(--marrom);
+            background-color: transparent;
+            width: 100%;
+        }
+
+        .navbar-nav {
+            margin-left: auto;
+            gap: 15px;
         }
 
         .navbar-brand {
