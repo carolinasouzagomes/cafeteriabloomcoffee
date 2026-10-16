@@ -10,14 +10,8 @@ public class HomeController {
         return "index";
     }
 
-
-    @GetMapping("/login")   
-    public String login() {
-        return "login_cliente";
-    }
-
-    @GetMapping("/login-admin")
-    public String logi_admin() {
-        return "login_funcionarios_adm";
+    @GetMapping("/sobre")
+    public String sobre() {
+        return "sobre";
     }
 }

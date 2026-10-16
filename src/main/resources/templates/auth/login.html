@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Bloom Coffee</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
+  <link rel="stylesheet" th:href="@{/css/loginCliente.css}">
+
+</head>
+<body>
+  <div class="login-shell">
+    <div class="login-grid">
+      <aside class="brand-panel">
+        <div class="brand-top">
+          <div class="brand-pill">
+            <span class="mini-badge">☕</span>
+            Bloom Coffee
+          </div>
+        </div>
+
+        <div class="brand-content">
+          <div class="emoji">🐾</div>
+          <h1>Que bom te ver por aqui!</h1>
+          <p>
+            Acesse sua conta e aproveite seus cafés favoritos, receitas especiais e
+            o melhor lugar para pedir com a cara do seu gatinho.
+          </p>
+
+          <div class="brand-card">
+            <strong>Seu café favorito, a um clique.</strong>
+            <span>Faça pedidos, acompanhe e personalize tudo com carinho.</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="form-panel">
+        <div class="form-box">
+          <div class="form-top">
+            <span class="eyebrow">Cliente</span>
+            <h2>Entrar</h2>
+            <p class="subtitle">Acesse sua conta para continuar suas escolhas preferidas.</p>
+          </div>
+
+          <form th:action="@{/login}" method="post">
+            <div class="field">
+              <label for="email">E-mail</label>
+              <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      placeholder="seuemail@exemplo.com"
+                      autocomplete="username"
+                      required>
+            </div>
+
+            <div class="field">
+              <label for="senha">Senha</label>
+              <input
+                      id="senha"
+                      type="password"
+                      name="senha"
+                      placeholder="Digite sua senha"
+                      autocomplete="current-password"
+                      required>
+            </div>
+
+            <p th:if="${param.error}" class="mensagem-erro">
+              E-mail ou senha inválidos.
+            </p>
+
+            <button type="submit" class="btn-primary-custom">
+              Entrar
+            </button>
+          </form>
+
+          <p>
+            Ainda não tem conta?
+            <a th:href="@{/cadastro}">Criar conta</a>
+          </p>
+
+        </div>
+      </section>
+    </div>
+  </div>
+
+
+</body>
+</html>

@@ -8,715 +8,705 @@
     <title>Produtos | Bloom Coffee</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
-
-    <style>
-    :root {
-        --marrom: #3b2118;
-        --marrom-claro: #8b5e46;
-        --creme: #fff8ef;
-        --laranja: #d98b5f;
-        --bege: #f2dfce;
-    }
-
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        background-color: var(--creme);
-        color: var(--marrom);
-        font-family: "Segoe UI", sans-serif;
-    }
-
-    /* Header transparente sobre a imagem */
-    header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 10;
-    }
-
-    .navbar {
-        background-color: transparent !important;
-        box-shadow: none !important;
-    }
-
-    .navbar-brand {
-        color: #fff !important;
-        font-size: 1.6rem;
-        font-weight: 700;
-        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
-    }
-
-    .navbar-brand span {
-        color: var(--laranja);
-    }
-
-    .nav-link {
-        color: #fff !important;
-        font-weight: 500;
-        margin-left: 1rem;
-        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
-        transition: color 0.3s ease;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-        color: var(--laranja) !important;
-    }
-
-    .navbar-toggler {
-        border-color: rgba(255, 255, 255, 0.7);
-    }
-
-    /* Legendas sem fundo */
-    .carousel-caption {
-        background: transparent !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-        padding: 1rem;
-        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-    }
-
-    .carousel-caption h1,
-    .carousel-caption h2,
-    .carousel-caption h5,
-    .carousel-caption p,
-    .carousel-caption span {
-        background: transparent !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-    }
-
-    /* Caso a página tenha um banner interno */
-    .page-header {
-        min-height: 360px;
-        display: flex;
-        align-items: center;
-        background:
-            linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
-            url("https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1800&q=85")
-            center/cover;
-        color: #fff;
-    }
-
-    .page-header h1 {
-        font-size: clamp(2.5rem, 6vw, 4.5rem);
-        font-weight: 700;
-    }
-
-    .page-header p {
-        max-width: 650px;
-        margin: 0 auto;
-        font-size: 1.15rem;
-    }
-
-    .section-title {
-        color: var(--marrom);
-        font-weight: 700;
-    }
-
-    .section-subtitle {
-        color: var(--marrom-claro);
-    }
-
-    .category-button {
-        border: 1px solid var(--laranja);
-        border-radius: 50px;
-        background-color: transparent;
-        color: var(--marrom);
-        transition: all 0.3s ease;
-    }
-
-    .category-button:hover,
-    .category-button.active {
-        background-color: transparent;
-        border-color: var(--laranja);
-        color: var(--laranja);
-    }
-
-    .product-card {
-        height: 100%;
-        overflow: hidden;
-        border: none;
-        border-radius: 20px;
-        background-color: #fff;
-        box-shadow: 0 8px 24px rgba(59, 33, 24, 0.10);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 32px rgba(59, 33, 24, 0.18);
-    }
-
-    .product-card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-    }
-
-    .product-card .card-body {
-        padding: 1.4rem;
-    }
-
-    .product-card h3 {
-        color: var(--marrom);
-        font-size: 1.25rem;
-        font-weight: 700;
-    }
-
-    .product-description {
-        min-height: 48px;
-        color: #6c625d;
-    }
-
-    .product-price {
-        color: var(--laranja);
-        font-size: 1.2rem;
-        font-weight: 700;
-    }
-
-    .cat-badge {
-        background-color: var(--bege);
-        color: var(--marrom);
-    }
-
-    /* Botões transparentes */
-    .btn-coffee {
-        border: 2px solid var(--laranja) !important;
-        border-radius: 50px;
-        background-color: transparent !important;
-        color: var(--marrom) !important;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .btn-coffee:hover {
-        border-color: var(--laranja) !important;
-        background-color: transparent !important;
-        color: var(--laranja) !important;
-        transform: translateY(-2px);
-    }
-
-    /* Botões sobre imagens */
-    .carousel-caption .btn-coffee,
-    .page-header .btn-coffee {
-        border-color: #fff !important;
-        color: #fff !important;
-    }
-
-    .carousel-caption .btn-coffee:hover,
-    .page-header .btn-coffee:hover {
-        background-color: transparent !important;
-        border-color: #fff !important;
-        color: #fff !important;
-    }
-
-    .highlight-section {
-        background-color: var(--bege);
-    }
-
-    .highlight-image {
-        width: 100%;
-        height: 380px;
-        object-fit: cover;
-        border-radius: 24px;
-    }
-
-    .accordion-item {
-        border: none;
-        margin-bottom: 0.8rem;
-        border-radius: 12px !important;
-        overflow: hidden;
-    }
-
-    .accordion-button {
-        color: var(--marrom);
-        font-weight: 600;
-        background-color: #fff;
-    }
-
-    .accordion-button:not(.collapsed) {
-        color: #fff;
-        background-color: var(--marrom);
-        box-shadow: none;
-    }
-
-    .accordion-button:focus {
-        box-shadow: 0 0 0 0.2rem rgba(217, 139, 95, 0.25);
-    }
-
-    footer {
-        background: var(--marrom) !important;
-        background-color: var(--marrom) !important;
-        color: #fff;
-        box-shadow: none !important;
-        border: none !important;
-    }
-</style>
 </head>
 
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container py-2">
-                <a class="navbar-brand" th:href="@{/}">
-                    Bloom <span>☕</span> Coffee
-                </a>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container py-2">
+            <a class="navbar-brand" th:href="@{/}">
+                Bloom <span>☕</span> Coffee
+            </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
                     aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="menuPrincipal">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/}">Home</a>
-                        </li>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Home</a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" th:href="@{/produtos}">
-                                Produtos
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/produtos}">
+                            Produtos
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link"  th:href="@{/pedidos}">Pedidos</a>
-                        </li>
-                    </ul>
-                </div>
+                    <li class="nav-item">
+                        <a class="nav-link"  th:href="@{/pedidos}">Pedidos</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 
-    <main>
+<main>
 
-        <section class="page-header text-center">
-            <div class="container">
+    <section class="page-header text-center">
+        <div class="container">
                 <span class="text-uppercase fw-bold" style="color: var(--laranja);">
                     Cardápio Bloom
                 </span>
 
-                <h1 class="mt-2">Produtos feitos com carinho</h1>
+            <h1 class="mt-2">Produtos feitos com carinho</h1>
 
-                <p class="lead">
-                    Conheça nossos cafés, doces e lanches preparados para deixar
-                    sua experiência ainda mais especial.
-                </p>
-            </div>
-        </section>
+            <p class="lead">
+                Conheça nossos cafés, doces e lanches preparados para deixar
+                sua experiência ainda mais especial.
+            </p>
+        </div>
+    </section>
 
-        <section id="produtos" class="container py-5">
+    <section id="produtos" class="container py-5">
 
-            <div class="text-center mb-4">
-                <h2 class="section-title">Escolha seu favorito</h2>
-                <p class="section-subtitle">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Escolha seu favorito</h2>
+                <p class="section-subtitle mb-0">
                     Sabores deliciosos para acompanhar seu momento com nossos gatinhos.
                 </p>
             </div>
 
-            <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
-                <a href="#cafes" class="btn category-button active">☕ Cafés</a>
-                <a href="#doces" class="btn category-button">🍰 Doces</a>
-                <a href="#lanches" class="btn category-button">🥪 Lanches</a>
-                <a href="#bebidas" class="btn category-button">🥤 Bebidas</a>
+            <button class="btn btn-order mt-3 mt-md-0" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#carrinhoOffcanvas">
+                🛒 Carrinho
+                <span id="cartBadge" class="badge text-bg-light ms-1">0</span>
+            </button>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+            <a href="#cafes" class="btn category-button active">☕ Cafés</a>
+            <a href="#doces" class="btn category-button">🍰 Doces</a>
+            <a href="#lanches" class="btn category-button">🥪 Lanches</a>
+            <a href="#bebidas" class="btn category-button">🥤 Bebidas</a>
+        </div>
+
+        <section id="cafes" class="mb-5">
+            <div class="d-flex align-items-center mb-4">
+                <h2 class="section-title mb-0">Cafés especiais</h2>
+                <span class="badge rounded-pill cat-badge ms-3">Mais pedidos</span>
             </div>
 
-            <section id="cafes" class="mb-5">
-                <div class="d-flex align-items-center mb-4">
-                    <h2 class="section-title mb-0">Cafés especiais</h2>
-                    <span class="badge rounded-pill cat-badge ms-3">Mais pedidos</span>
+            <div class="row g-4">
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85"
+                             class="card-img-top" alt="Café espresso">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Espresso Bloom</h3>
+
+                            <p class="product-description">
+                                Café intenso, encorpado e preparado com grãos selecionados.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 5,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="espresso"
+                                        data-name="Espresso Bloom" data-price="5.90"
+                                        data-image="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
                 </div>
 
-                <div class="row g-4">
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85"
+                             class="card-img-top" alt="Cappuccino cremoso">
 
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85"
-                                class="card-img-top" alt="Café espresso">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Cappuccino Gatíneo</h3>
 
-                            <div class="card-body d-flex flex-column">
-                                <h3>Espresso Bloom</h3>
+                            <p class="product-description">
+                                Espresso, leite vaporizado e espuma cremosa com toque de canela.
+                            </p>
 
-                                <p class="product-description">
-                                    Café intenso, encorpado e preparado com grãos selecionados.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 5,90</span>
-                                </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 6,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="cappuccino"
+                                        data-name="Cappuccino Gatíneo" data-price="6.90"
+                                        data-image="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
                             </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85"
-                                class="card-img-top" alt="Cappuccino cremoso">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Cappuccino Gatíneo</h3>
-
-                                <p class="product-description">
-                                    Espresso, leite vaporizado e espuma cremosa com toque de canela.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 6,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=900&q=85"
-                                class="card-img-top" alt="Café latte">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Latte Ronrom</h3>
-
-                                <p class="product-description">
-                                    Café suave com leite cremoso e uma camada delicada de espuma.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 6,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
+                        </div>
+                    </article>
                 </div>
-            </section>
 
-            <section id="doces" class="mb-5">
-                <h2 class="section-title mb-4">Doces da casa</h2>
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=900&q=85"
+                             class="card-img-top" alt="Café latte">
 
-                <div class="row g-4">
+                        <div class="card-body d-flex flex-column">
+                            <h3>Latte Ronrom</h3>
 
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/cookies.jpg"
-                                class="card-img-top" alt="Cookies de Gatinhos">
+                            <p class="product-description">
+                                Café suave com leite cremoso e uma camada delicada de espuma.
+                            </p>
 
-                            <div class="card-body d-flex flex-column">
-                                <h3>Cookies de Gatinhos</h3>
-
-                                <p class="product-description">
-                                    Cookies em formato de gatinhos.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 16,90</span>
-                                </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 6,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="latte"
+                                        data-name="Latte Ronrom" data-price="6.90"
+                                        data-image="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
                             </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/browines.jpg"
-                                class="card-img-top" alt="Brownies">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Brownies</h3>
-
-                                <p class="product-description">
-                                    Brownies com biscoito em formato de patinha de chocolate.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 22,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/pudim.jpg"
-                                class="card-img-top" alt="Pudim">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Pudim</h3>
-
-                                <p class="product-description">
-                                    Pudim em formato de gatinho.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 19,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
+                        </div>
+                    </article>
                 </div>
-            </section>
 
-            <section id="lanches" class="mb-5">
-                <h2 class="section-title mb-4">Lanches</h2>
-
-                <div class="row g-4">
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/salgado1.jpg"
-                                class="card-img-top" alt="Sanduíche Gatuno">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Sanduíche de Gatinhos</h3>
-
-                                <p class="product-description">
-                                    Pão artesanal, frango, queijo e alface.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 20,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/mistoquente.jpg"
-                                class="card-img-top" alt="Misto Quente">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Misto Quente</h3>
-
-                                <p class="product-description">
-                                    Pão de forma recheado com presunto e queijo.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 5,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/panqueca.jpg"
-                                class="card-img-top" alt="Lanche Panqueca">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Lanche Panqueca</h3>
-
-                                <p class="product-description">
-                                    Panqueca recheada com cebola roxa, carne bovina, alface, molho rose.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 27,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                </div>
-            </section>
-
-            <section id="bebidas" class="mb-5">
-                <h2 class="section-title mb-4">Bebidas</h2>
-
-                <div class="row g-4">
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/chadecamomila.jpg"
-                                class="card-img-top" alt="Chá de Camomila">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Chá de Camomila</h3>
-
-                                <p class="product-description">
-                                    Chá de camomila quente adocicado.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 6,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/cafegelado.jpg"
-                                class="card-img-top" alt="Café Gelado">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Café Gelado</h3>
-
-                                <p class="product-description">
-                                    Café gelado com latte e chantilly.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 11,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/aguacomgas.jpg"
-                                class="card-img-top" alt="Água com Gás">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Água com Gás</h3>
-
-                                <p class="product-description">
-                                    Água com gás acompanhado por limões sicilianos.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 4,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <article class="card product-card">
-                            <img src="/img/coca.jpg"
-                                class="card-img-top" alt="Coca Cola Zero">
-
-                            <div class="card-body d-flex flex-column">
-                                <h3>Coca Cola Zero</h3>
-
-                                <p class="product-description">
-                                    Refrigerante Zero.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <span class="product-price">R$ 4,90</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                </div>
-            </section>
-
+            </div>
         </section>
 
-        <section class="highlight-section py-5">
-            <div class="container">
-                <div class="row align-items-center g-5">
-                    <div class="col-lg-6">
-                        <img src="/img/espaco_cat.jpg"
-                            class="highlight-image" alt="Gato em um ambiente aconchegante">
-                    </div>
+        <section id="doces" class="mb-5">
+            <h2 class="section-title mb-4">Doces da casa</h2>
 
-                    <div class="col-lg-6">
+            <div class="row g-4">
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/cookies.jpg"
+                             class="card-img-top" alt="Cookies de Gatinhos">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Cookies de Gatinhos</h3>
+
+                            <p class="product-description">
+                                Cookies em formato de gatinhos.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 16,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="cookies"
+                                        data-name="Cookies de Gatinhos" data-price="16.90"
+                                        data-image="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/browines.jpg"
+                             class="card-img-top" alt="Brownies">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Brownies</h3>
+
+                            <p class="product-description">
+                                Brownies com biscoito em formato de patinha de chocolate.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 22,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="brownies"
+                                        data-name="Brownies" data-price="22.90"
+                                        data-image="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/pudim.jpg"
+                             class="card-img-top" alt="Pudim">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Pudim</h3>
+
+                            <p class="product-description">
+                                Pudim em formato de gatinho.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 19,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="pudim"
+                                        data-name="Pudim" data-price="19.90"
+                                        data-image="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/palhaitaliana.png"
+                             class="card-img-top" alt="Palha Itáliana">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Palha Itáliana</h3>
+
+                            <p class="product-description">
+                                Doce feito à base de brigadeiro e biscoito triturado moldados em tabletes.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 14,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="palhaitaliana"
+                                        data-name="Palha Itáliana" data-price="14.90"
+                                        data-image="https://images.unsplash.com/photo-1573675846248-e4cc7bb8fd28?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/brigadeiro.jpg"
+                             class="card-img-top" alt="Brigadeiro">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Brigadeiros Gourmet</h3>
+
+                            <p class="product-description">
+                                Bandeja de Brigadeiros de ninho com nutela, churros com doce de leite, brigadeiro e nescafé.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 20,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="brigadeiro"
+                                        data-name="Brigadeiros Gourmet" data-price="20.90"
+                                        data-image="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="lanches" class="mb-5">
+            <h2 class="section-title mb-4">Lanches</h2>
+
+            <div class="row g-4">
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/salgado1.jpg"
+                             class="card-img-top" alt="Sanduíche Gatuno">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Sanduíche de Gatinhos</h3>
+
+                            <p class="product-description">
+                                Pão artesanal, frango, queijo e alface.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 20,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="sanduiche"
+                                        data-name="Sanduíche de Gatinhos" data-price="20.90"
+                                        data-image="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/mistoquente.jpg"
+                             class="card-img-top" alt="Misto Quente">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Misto Quente</h3>
+
+                            <p class="product-description">
+                                Pão de forma recheado com presunto e queijo.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 5,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="mistoquente"
+                                        data-name="Misto Quente" data-price="5.90"
+                                        data-image="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/panqueca.jpg"
+                             class="card-img-top" alt="Lanche Panqueca">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Lanche Panqueca</h3>
+
+                            <p class="product-description">
+                                Panqueca recheada com cebola roxa, carne bovina, alface, molho rose, tomate e maionese.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 27,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="panqueca"
+                                        data-name="Lanche Panqueca" data-price="27.90"
+                                        data-image="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="bebidas" class="mb-5">
+            <h2 class="section-title mb-4">Bebidas</h2>
+
+            <div class="row g-4">
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/chadecamomila.jpg"
+                             class="card-img-top" alt="Chá de Camomila">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Chá de Camomila</h3>
+
+                            <p class="product-description">
+                                Chá de camomila quente adocicado.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 6,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="chadecamomila"
+                                        data-name="Chá de Camomila" data-price="6.90"
+                                        data-image="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/cafegelado.jpg"
+                             class="card-img-top" alt="Café Gelado">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Café Gelado</h3>
+
+                            <p class="product-description">
+                                Café gelado com latte e chantilly.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 11,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="cafegelado"
+                                        data-name="Café Gelado" data-price="11.90"
+                                        data-image="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/aguacomgas.jpg"
+                             class="card-img-top" alt="Água com Gás">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Água com Gás</h3>
+
+                            <p class="product-description">
+                                Água com gás acompanhado por limões sicilianos.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 4,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="aguacomgas"
+                                        data-name="Água com Gás" data-price="4.90"
+                                        data-image="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card product-card">
+                        <img src="/img/coca.jpg"
+                             class="card-img-top" alt="Coca Cola Zero">
+
+                        <div class="card-body d-flex flex-column">
+                            <h3>Coca Cola Zero</h3>
+
+                            <p class="product-description">
+                                Refrigerante Zero.
+                            </p>
+
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="product-price">R$ 4,90</span>
+                                <button class="btn btn-coffee btn-sm adicionar-produto" data-id="coca"
+                                        data-name="Coca Cola Zero" data-price="4.90"
+                                        data-image="https://images.unsplash.com/photo-1554866585-d42a654c75f5?auto=format&fit=crop&w=900&q=85">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+    </section>
+
+    <section class="highlight-section py-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <img src="/img/espaco_cat.jpg"
+                         class="highlight-image" alt="Gato em um ambiente aconchegante">
+                </div>
+
+                <div class="col-lg-6">
                         <span class="text-uppercase fw-bold small" style="color: var(--laranja);">
                             Um momento especial
                         </span>
 
-                        <h2 class="section-title display-6 mt-2">
-                            Aproveite nossos produtos na companhia dos nossos gatinhos
-                        </h2>
-
-                        <p class="section-subtitle mt-3">
-                            Nosso espaço foi criado para unir bons sabores, conforto e a companhia
-                            tranquila dos gatos.
-                        </p>
-
-                        <a href="/templates/pedidos/pedidos.html" class="btn btn-coffee">
-                            Fazer um pedido
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="pedidos" class="container py-5">
-            <div class="text-center mb-4">
-                <h2 class="section-title">Como fazer seu pedido?</h2>
-                <p class="section-subtitle">
-                    É simples escolher suas delícias no Bloom Coffee.
-                </p>
-            </div>
-
-            <div class="accordion" id="accordionPedidos">
-
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#passoUm">
-                            1. Escolha seus produtos
-                        </button>
+                    <h2 class="section-title display-6 mt-2">
+                        Aproveite nossos produtos na companhia dos nossos gatinhos
                     </h2>
 
-                    <div id="passoUm" class="accordion-collapse collapse show" data-bs-parent="#accordionPedidos">
-                        <div class="accordion-body">
-                            Navegue pelas categorias e escolha seus cafés, doces e lanches favoritos.
-                        </div>
-                    </div>
+                    <p class="section-subtitle mt-3">
+                        Nosso espaço foi criado para unir bons sabores, conforto e a companhia
+                        tranquila dos gatos.
+                    </p>
+
+                    <a href="#" class="btn btn-coffee" data-bs-toggle="offcanvas" data-bs-target="#carrinhoOffcanvas">
+                        Fazer um pedido
+                    </a>
                 </div>
-
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#passoDois">
-                            2. Confirme seu pedido
-                        </button>
-                    </h2>
-
-                    <div id="passoDois" class="accordion-collapse collapse" data-bs-parent="#accordionPedidos">
-                        <div class="accordion-body">
-                            Clique no botão "Fazer pedido" e informe os detalhes do seu pedido à nossa equipe.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#passoTres">
-                            3. Aproveite a experiência
-                        </button>
-                    </h2>
-
-                    <div id="passoTres" class="accordion-collapse collapse" data-bs-parent="#accordionPedidos">
-                        <div class="accordion-body">
-                            Aguarde seu pedido e aproveite o ambiente acolhedor do Bloom Coffee.
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </section>
-
-    </main>
-
-    <footer class="py-4">
-        <div class="container text-center">
-            <p class="mb-1 fw-bold">Bloom Coffee ☕🐈</p>
-            <small>
-                Um espaço feito para pessoas e gatos apaixonados por café.
-            </small>
         </div>
-    </footer>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+</main>
+
+<footer class="py-4">
+    <div class="container text-center">
+        <p class="mb-1 fw-bold">Bloom Coffee ☕🐈</p>
+        <small>
+            Um espaço feito para pessoas e gatos apaixonados por café.
+        </small>
+    </div>
+</footer>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="carrinhoOffcanvas" aria-labelledby="carrinhoTitulo">
+    <div class="offcanvas-header">
+        <h2 class="offcanvas-title h4" id="carrinhoTitulo">Seu carrinho 🛒</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="cartItems">
+            <div class="empty-cart">Seu carrinho está vazio.</div>
+        </div>
+
+        <div class="order-total">
+            <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal</span>
+                <strong id="cartSubtotal">R$ 0,00</strong>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3">
+                <span>Entrega</span>
+                <strong id="cartDelivery">R$ 5,00</strong>
+            </div>
+
+            <div class="d-flex justify-content-between fs-5">
+                <strong>Total</strong>
+                <strong id="cartTotal">R$ 0,00</strong>
+            </div>
+
+            <a href="@{/pedidos}" class="btn btn-order w-100 mt-4">
+                Ir para Pedidos
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sucessoModal" tabindex="-1" aria-labelledby="sucessoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4">
+            <div class="modal-body text-center p-5">
+                <div class="display-3 mb-3">🐈</div>
+                <h2 class="h3" id="sucessoModalLabel">Pedido recebido!</h2>
+                <p class="text-muted">
+                    Obrigado por pedir no Bloom Coffee. Seu pedido será preparado com muito carinho.
+                </p>
+                <button type="button" class="btn btn-order px-4" data-bs-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+
+<script>
+    const carrinho = [];
+    const cartItems = document.getElementById("cartItems");
+    const cartBadge = document.getElementById("cartBadge");
+    const cartSubtotal = document.getElementById("cartSubtotal");
+    const cartTotal = document.getElementById("cartTotal");
+    const taxaEntrega = 5;
+
+    function formatarMoeda(valor) {
+        return valor.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+    }
+
+    function atualizarCarrinho() {
+        cartItems.innerHTML = "";
+
+        if (carrinho.length === 0) {
+            cartItems.innerHTML = `
+                        <div class="empty-cart">Seu carrinho está vazio.</div>
+                    `;
+
+            cartBadge.textContent = "0";
+            cartSubtotal.textContent = "R$ 0,00";
+            cartTotal.textContent = "R$ 0,00";
+            return;
+        }
+
+        let subtotal = 0;
+        let quantidadeTotal = 0;
+
+        carrinho.forEach((produto, index) => {
+            const totalProduto = produto.price * produto.quantity;
+
+            subtotal += totalProduto;
+            quantidadeTotal += produto.quantity;
+
+            const item = document.createElement("div");
+            item.className = "cart-item";
+
+            item.innerHTML = `
+                        <div class="d-flex gap-3">
+                            <img src="${produto.image}" alt="${produto.name}">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <strong>${produto.name}</strong>
+                                    <button class="btn btn-sm text-danger p-0"
+                                        onclick="removerProduto(${index})"
+                                        aria-label="Remover ${produto.name}">
+                                        ×
+                                    </button>
+                                </div>
+
+                                <small class="text-muted">${formatarMoeda(produto.price)} cada</small>
+
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <div class="quantity-control">
+                                        <button onclick="alterarQuantidade(${index}, -1)">−</button>
+                                        <span>${produto.quantity}</span>
+                                        <button onclick="alterarQuantidade(${index}, 1)">+</button>
+                                    </div>
+
+                                    <strong>${formatarMoeda(totalProduto)}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+            cartItems.appendChild(item);
+        });
+
+        cartBadge.textContent = quantidadeTotal;
+        cartSubtotal.textContent = formatarMoeda(subtotal);
+        cartTotal.textContent = formatarMoeda(subtotal + taxaEntrega);
+    }
+
+    function adicionarProduto(produto) {
+        const produtoExistente = carrinho.find(item => item.id === produto.id);
+
+        if (produtoExistente) {
+            produtoExistente.quantity++;
+        } else {
+            carrinho.push({ ...produto, quantity: 1 });
+        }
+
+        atualizarCarrinho();
+    }
+
+    function alterarQuantidade(index, quantidade) {
+        carrinho[index].quantity += quantidade;
+
+        if (carrinho[index].quantity <= 0) {
+            carrinho.splice(index, 1);
+        }
+
+        atualizarCarrinho();
+    }
+
+    function removerProduto(index) {
+        carrinho.splice(index, 1);
+        atualizarCarrinho();
+    }
+
+    document.querySelectorAll(".adicionar-produto").forEach(botao => {
+        botao.addEventListener("click", () => {
+            const produto = {
+                id: botao.dataset.id,
+                name: botao.dataset.name,
+                price: Number(botao.dataset.price),
+                image: botao.dataset.image
+            };
+
+            adicionarProduto(produto);
+
+            botao.textContent = "Adicionado ✓";
+
+            setTimeout(() => {
+                botao.textContent = "Adicionar";
+            }, 1200);
+        });
+    });
+
+    atualizarCarrinho();
+</script>
 
 </body>
 
