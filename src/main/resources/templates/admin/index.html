@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Bloom Coffee</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <a th:href="@{/admin}" class="brand text-decoration-none text-reset">
+        <div class="brand-icon">
+            <i class="bi bi-cup-hot-fill"></i>
+        </div>
+        <div>
+            <div class="brand-name">Bloom Coffee</div>
+            <div class="brand-subtitle">PAINEL ADMINISTRATIVO</div>
+        </div>
+    </a>
+
+    <nav>
+        <div class="menu-label">MENU PRINCIPAL</div>
+
+        <a th:href="@{/admin}" class="menu-link active">
+            <i class="bi bi-grid-1x2-fill"></i>
+            Dashboard
+        </a>
+
+        <a th:href="@{/admin/produtos/cadastrar}" class="menu-link">
+            <i class="bi bi-plus-square"></i>
+            Cadastrar produto
+        </a>
+
+        <a th:href="@{/produtos}" class="menu-link">
+            <i class="bi bi-box-seam"></i>
+            Página de produtos
+        </a>
+
+        <a th:href="@{/pedidos}" class="menu-link">
+            <i class="bi bi-cup-straw"></i>
+            Cardápio público
+        </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-note">
+            <i class="bi bi-heart-fill me-1"></i>
+            Um café quentinho e um gatinho tornam qualquer dia melhor.
+        </div>
+
+        <a th:href="@{/}" class="menu-link">
+            <i class="bi bi-house"></i>
+            Voltar ao site
+        </a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="menu-link logout-button">
+                <i class="bi bi-box-arrow-left"></i>
+                Sair do painel
+            </button>
+        </form>
+    </div>
+</aside>
+
+<main class="main">
+
+    <header class="topbar">
+        <div>
+            <div class="breadcrumb-text">
+                Bloom Coffee / <strong>Dashboard</strong>
+            </div>
+        </div>
+
+        <div class="admin-profile">
+            <div class="avatar">
+                <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="admin-details">
+                <div class="admin-name">Administrador</div>
+                <div class="admin-role">Gestão da cafeteria</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <section class="welcome-row">
+            <div>
+                <div class="eyebrow">Seu espaço de gestão</div>
+                <h1 class="page-title">Olá, administrador! ☕</h1>
+                <p class="welcome-description">
+                    Aqui está um resumo do seu Bloom Coffee.
+                    Vamos deixar tudo em ordem?
+                </p>
+            </div>
+
+            <a th:href="@{/admin/produtos/cadastrar}" class="btn btn-coffee">
+                <i class="bi bi-plus-lg me-2"></i>
+                Novo produto
+            </a>
+        </section>
+
+        <!-- ESTATÍSTICAS -->
+        <section class="stats-grid">
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Total de produtos</span>
+                    <div class="stat-icon icon-brown">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                </div>
+                <div class="stat-number" th:text="${totalProdutos}">0</div>
+                <div class="stat-description">
+                    Produtos cadastrados no sistema
+                </div>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Disponíveis</span>
+                    <div class="stat-icon icon-green">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-number" th:text="${produtosDisponiveis}">0</div>
+                <div class="stat-description">
+                    Disponíveis para exibição no cardápio
+                </div>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Indisponíveis</span>
+                    <div class="stat-icon icon-red">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-number" th:text="${produtosIndisponiveis}">0</div>
+                <div class="stat-description">
+                    Produtos desativados no cadastro
+                </div>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Categorias</span>
+                    <div class="stat-icon icon-orange">
+                        <i class="bi bi-tags"></i>
+                    </div>
+                </div>
+                <div class="stat-number" th:text="${totalCategorias}">0</div>
+                <div class="stat-description">
+                    Categorias distintas cadastradas
+                </div>
+            </article>
+
+        </section>
+
+        <!-- PRODUTOS RECENTES -->
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Produtos cadastrados</h2>
+                    <div class="panel-subtitle">
+                        Os últimos produtos adicionados ao sistema
+                    </div>
+                </div>
+                <a th:href="@{/admin/produtos/cadastrar}" class="text-link">
+                    + Adicionar produto
+                </a>
+            </div>
+
+            <div class="table-responsive"
+                 th:if="${not #lists.isEmpty(produtosRecentes)}">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Disponibilidade</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="produto : ${produtosRecentes}">
+                        <td>
+                            <div class="product-cell">
+                                <img class="product-image"
+                                     th:if="${produto.arquivoImagem != null and !#strings.isEmpty(produto.arquivoImagem)}"
+                                     th:src="@{${produto.arquivoImagem}}"
+                                     th:alt="${produto.nome}">
+
+                                <div class="product-placeholder"
+                                     th:if="${produto.arquivoImagem == null or #strings.isEmpty(produto.arquivoImagem)}">
+                                    <i class="bi bi-cup-hot"></i>
+                                </div>
+
+                                <div>
+                                    <div class="product-name"
+                                         th:text="${produto.nome}">
+                                        Nome do produto
+                                    </div>
+                                    <div class="product-id">
+                                        ID #<span th:text="${produto.idProduto}">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td th:text="${produto.categoria}">Bebidas</td>
+
+                        <td class="price"
+                            th:text="${'R$ ' + #numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">
+                            R$ 0,00
+                        </td>
+
+                        <td>
+                            <span class="status available"
+                                  th:if="${produto.disponivel == true}">
+                                <i class="bi bi-circle-fill"
+                                   style="font-size: 6px"></i>
+                                Disponível
+                            </span>
+
+                            <span class="status unavailable"
+                                  th:unless="${produto.disponivel == true}">
+                                <i class="bi bi-circle-fill"
+                                   style="font-size: 6px"></i>
+                                Indisponível
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state"
+                 th:if="${#lists.isEmpty(produtosRecentes)}">
+                <i class="bi bi-cup-hot"></i>
+                <h3>Seu cardápio está esperando!</h3>
+                <p class="small">
+                    Você ainda não cadastrou nenhum produto.
+                </p>
+                <a th:href="@{/admin/produtos/cadastrar}"
+                   class="btn btn-coffee mt-2">
+                    Cadastrar primeiro produto
+                </a>
+            </div>
+        </section>
+
+        <!-- AÇÕES E RESUMO -->
+        <section class="bottom-grid">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Acesso rápido</h2>
+                        <div class="panel-subtitle">
+                            Atalhos para as principais funções
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+
+                    <a th:href="@{/admin/produtos/cadastrar}"
+                       class="action-card">
+                        <div class="action-icon">
+                            <i class="bi bi-plus-square"></i>
+                        </div>
+                        <div class="action-title">Cadastrar produto</div>
+                        <div class="action-description">
+                            Adicione itens ao cardápio
+                        </div>
+                    </a>
+
+                    <a th:href="@{/produtos}" class="action-card">
+                        <div class="action-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <div class="action-title">Gerenciar produtos</div>
+                        <div class="action-description">
+                            Acesse a página de produtos
+                        </div>
+                    </a>
+
+                    <a th:href="@{/cardapio}" class="action-card">
+                        <div class="action-icon">
+                            <i class="bi bi-shop"></i>
+                        </div>
+                        <div class="action-title">Ver cardápio</div>
+                        <div class="action-description">
+                            Confira a página pública
+                        </div>
+                    </a>
+
+                    <a th:href="@{/}" class="action-card">
+                        <div class="action-icon">
+                            <i class="bi bi-house-heart"></i>
+                        </div>
+                        <div class="action-title">Página inicial</div>
+                        <div class="action-description">
+                            Volte para o site Bloom Coffee
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Visão geral do catálogo</h2>
+                        <div class="panel-subtitle">
+                            Situação atual dos produtos cadastrados
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overview-content">
+
+                    <div class="overview-item">
+                        <div class="overview-label">
+                            <i class="bi bi-check-circle-fill"
+                               style="color: #6b9d76"></i>
+                            Produtos disponíveis
+                        </div>
+                        <div class="overview-value"
+                             th:text="${produtosDisponiveis + ' de ' + totalProdutos}">
+                            0 de 0
+                        </div>
+                    </div>
+
+                    <div class="progress mb-4">
+                        <div class="progress-bar green"
+                             role="progressbar"
+                             th:style="${'width: ' + (totalProdutos > 0 ? (produtosDisponiveis * 100.0 / totalProdutos) : 0) + '%'}"
+                             th:aria-valuenow="${produtosDisponiveis}"
+                             aria-valuemin="0"
+                             th:aria-valuemax="${totalProdutos}">
+                        </div>
+                    </div>
+
+                    <div class="overview-item">
+                        <div class="overview-label">
+                            <i class="bi bi-x-circle-fill"
+                               style="color: #c66a56"></i>
+                            Produtos indisponíveis
+                        </div>
+                        <div class="overview-value"
+                             th:text="${produtosIndisponiveis + ' de ' + totalProdutos}">
+                            0 de 0
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             role="progressbar"
+                             th:style="${'width: ' + (totalProdutos > 0 ? (produtosIndisponiveis * 100.0 / totalProdutos) : 0) + '%'}"
+                             th:aria-valuenow="${produtosIndisponiveis}"
+                             aria-valuemin="0"
+                             th:aria-valuemax="${totalProdutos}">
+                        </div>
+                    </div>
+
+                    <hr style="border-color: var(--border); margin: 25px 0;">
+
+                    <div class="overview-item">
+                        <div class="overview-label">
+                            <i class="bi bi-tags-fill"
+                               style="color: var(--orange)"></i>
+                            Categorias no catálogo
+                        </div>
+                        <div class="overview-value"
+                             th:text="${totalCategorias}">
+                            0
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            <i class="bi bi-cup-hot-fill me-1"></i>
+            Bloom Coffee · Painel administrativo
+            <br>
+            Feito com carinho e café ☕
+        </footer>
+
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

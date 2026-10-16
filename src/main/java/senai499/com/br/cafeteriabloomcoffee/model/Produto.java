@@ -1,7 +1,14 @@
 
 package senai499.com.br.cafeteriabloomcoffee.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "produto")
@@ -20,8 +27,14 @@ public class Produto {
     @Column(nullable = false, length = 100)
     private String categoria;
 
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal preco;
+
+    @Column(length = 255)
+    private String arquivoImagem;
+
     @Column(nullable = false)
-    private Boolean disponivel;
+    private Boolean disponivel = true;
 
     // Construtor vazio
     public Produto() {
@@ -29,14 +42,15 @@ public class Produto {
 
     // Construtor completo
     public Produto(String nome, String descricao,
-                   String categoria, Boolean disponivel) {
+                   String categoria, BigDecimal preco,
+                   String arquivoImagem, Boolean disponivel) {
         this.nome = nome;
         this.descricao = descricao;
         this.categoria = categoria;
+        this.preco = preco;
+        this.arquivoImagem = arquivoImagem;
         this.disponivel = disponivel;
     }
-
-    // Getters e Setters
 
     public Long getIdProduto() {
         return idProduto;
@@ -68,6 +82,22 @@ public class Produto {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
+
+    public String getArquivoImagem() {
+        return arquivoImagem;
+    }
+
+    public void setArquivoImagem(String arquivoImagem) {
+        this.arquivoImagem = arquivoImagem;
     }
 
     public Boolean getDisponivel() {

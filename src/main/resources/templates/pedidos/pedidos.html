@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -6,10 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos | Bloom Coffee</title>
 
+    <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}">
+    <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : 'X-CSRF-TOKEN'}">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
 
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/pedidos.css}">
 </head>
 
@@ -22,8 +26,9 @@
                 Bloom <span>☕</span> Coffee
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
-                    aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#menuPrincipal" aria-controls="menuPrincipal"
+                    aria-expanded="false" aria-label="Abrir menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -36,7 +41,7 @@
                         <a class="nav-link" th:href="@{/produtos}">Produtos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/pedidos}">Pedidos</a>
+                        <a class="nav-link active" th:href="@{/cardapio}">Pedidos</a>
                     </li>
                 </ul>
             </div>
@@ -58,6 +63,7 @@
     </section>
 
     <section class="container py-5">
+
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
             <div>
                 <h2 class="section-title mb-1">Produtos disponíveis</h2>
@@ -66,425 +72,87 @@
                 </p>
             </div>
 
-            <button class="btn btn-order mt-3 mt-md-0" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#carrinhoOffcanvas">
+            <button class="btn btn-order mt-3 mt-md-0" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#carrinhoOffcanvas">
                 🛒 Carrinho
                 <span id="cartBadge" class="badge text-bg-light ms-1">0</span>
             </button>
         </div>
 
         <div class="row g-4">
-            <!-- Bebidas Quentes -->
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85"
-                         alt="Café espresso" class="card-img-top">
+
+            <div class="col-12" th:if="${#lists.isEmpty(produtos)}">
+                <div class="alert alert-light text-center p-5">
+                    <h3>Nosso cardápio está sendo preparado! ☕</h3>
+                    <p class="mb-0">
+                        Em breve teremos delícias esperando por você.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4" th:each="produto : ${produtos}">
+                <article class="card product-card h-100">
+
+                    <img class="card-img-top"
+                         th:if="${produto.arquivoImagem != null and !#strings.isEmpty(produto.arquivoImagem)}"
+                         th:src="${#strings.startsWith(produto.arquivoImagem, 'http')
+                            ? produto.arquivoImagem
+                            : (#strings.startsWith(produto.arquivoImagem, '/')
+                                ? produto.arquivoImagem
+                                : '/' + produto.arquivoImagem)}"
+                         th:alt="${produto.nome}">
+
+                    <div class="card-img-top d-flex align-items-center justify-content-center"
+                         th:if="${produto.arquivoImagem == null or #strings.isEmpty(produto.arquivoImagem)}"
+                         style="height: 220px; background: #f4e8dc; color: #654638;">
+                        <span style="font-size: 3rem;">☕</span>
+                    </div>
+
                     <div class="card-body d-flex flex-column">
-                        <h3>Espresso Bloom</h3>
-                        <p class="product-description">
-                            Café intenso e encorpado preparado com grãos selecionados.
+                        <h3 th:text="${produto.nome}">Nome do produto</h3>
+
+                        <p class="product-description"
+                           th:text="${produto.descricao != null
+                                ? produto.descricao
+                                : 'Uma delícia preparada com carinho.'}">
+                            Descrição do produto
                         </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 5,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="espresso"
-                                    data-name="Espresso Bloom" data-price="5.90"
-                                    data-image="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85">
+
+                        <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
+
+                            <span class="product-price"
+                                  th:text="${'R$ ' + #numbers.formatDecimal(
+                                    produto.preco, 1, 'POINT', 2, 'COMMA')}">
+                                R$ 0,00
+                            </span>
+
+                            <button type="button"
+                                    class="btn btn-coffee btn-sm adicionar-produto"
+                                    th:data-id="${produto.idProduto}"
+                                    th:data-name="${produto.nome}"
+                                    th:data-price="${#numbers.formatDecimal(
+                                        produto.preco, 1, 'POINT', 2, 'POINT')}"
+                                    th:data-image="${produto.arquivoImagem != null
+                                        and !#strings.isEmpty(produto.arquivoImagem)
+                                        ? (#strings.startsWith(produto.arquivoImagem, 'http')
+                                            ? produto.arquivoImagem
+                                            : (#strings.startsWith(produto.arquivoImagem, '/')
+                                                ? produto.arquivoImagem
+                                                : '/' + produto.arquivoImagem))
+                                        : ''}">
                                 Adicionar
                             </button>
+
                         </div>
                     </div>
                 </article>
             </div>
 
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85"
-                         alt="Cappuccino" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Cappuccino</h3>
-                        <p class="product-description">
-                            Cappuccino cremoso com leite vaporizado e canela.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 6,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="cappuccino"
-                                    data-name="Cappuccino Gatíneo" data-price="6.90"
-                                    data-image="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/chadecamomila.jpg}"  alt="Chá de Camomila" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Chá de Camomila</h3>
-                        <p class="product-description">
-                            Chá de camomila quente adocicado.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 6,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="chadecamomila"
-                                    data-name="Chá de Camomila" data-price="6.90"
-                                    data-image="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Bebidas Geladas -->
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/cafegelado.jpg}" alt="Café Gelado" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Café Gelado</h3>
-                        <p class="product-description">
-                            Café gelado com latte e chantilly.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 11,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="cafegelado"
-                                    data-name="Café Gelado" data-price="11.90"
-                                    data-image="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/aguacomgas.jpg}" alt="Água com Gás" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Água com Gás</h3>
-                        <p class="product-description">
-                            Água com gás acompanhado por limões sicilianos.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 4,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="aguacomgas"
-                                    data-name="Água com Gás" data-price="4.90"
-                                    data-image="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/coca.jpg}"  alt="Coca Cola Zero" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Coca Cola Zero</h3>
-                        <p class="product-description">
-                            Refrigerante Zero.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 4,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="coca"
-                                    data-name="Coca Cola Zero" data-price="4.90"
-                                    data-image="https://images.unsplash.com/photo-1554866585-d42a654c75f5?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Doces -->
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/cookies.jpg}"  alt="Cookies" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Cookies de Gatinhos</h3>
-                        <p class="product-description">
-                            Cookies em formato de gatinhos.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 16,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="cookies"
-                                    data-name="Cookies de Gatinhos" data-price="16.90"
-                                    data-image="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/browines.jpg}"  alt="Brownies" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Brownies</h3>
-                        <p class="product-description">
-                            Brownies com biscoito em formato de patinha de chocolate branco com chocolate.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 22,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="brownies"
-                                    data-name="Brownies" data-price="22.90"
-                                    data-image="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/pudim.jpg}" alt="Pudim" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Pudim</h3>
-                        <p class="product-description">
-                            Pudim em formato de gatinho.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 19,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="pudim"
-                                    data-name="Pudim" data-price="19.90"
-                                    data-image="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/palhaitaliana.png}" alt="Palha Itáliana" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Palha Itáliana</h3>
-                        <p class="product-description">
-                            Doce feito à base de brigadeiro e biscoito triturado moldados em tabletes.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 14,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="palhaitaliana"
-                                    data-name="Palha Itáliana" data-price="14.90"
-                                    data-image="https://images.unsplash.com/photo-1573675846248-e4cc7bb8fd28?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/brigadeiro.jpg}" alt="Brigadeiro" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Brigadeiros Gourmet</h3>
-                        <p class="product-description">
-                            Bandeja de Brigadeiros de ninho com nutela, churros com doce de leite, brigadeiro e nescafé.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 20,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="brigadeiro"
-                                    data-name="Brigadeiros Gourmet" data-price="20.90"
-                                    data-image="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Salgados -->
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/salgado1.jpg}"  alt="Sanduíche" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Sanduíche de Gatinhos</h3>
-                        <p class="product-description">
-                            Pão artesanal, frango, queijo e alface.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 20,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="sanduiche"
-                                    data-name="Sanduíche de Gatinhos" data-price="20.90"
-                                    data-image="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/mistoquente.jpg}"  alt="Misto Quente" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Misto Quente</h3>
-                        <p class="product-description">
-                            Pão de forma recheado com presunto e queijo.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 5,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="mistoquente"
-                                    data-name="Misto Quente" data-price="5.90"
-                                    data-image="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/panqueca.jpg}" alt="Panqueca" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Lanche Panqueca</h3>
-                        <p class="product-description">
-                            Panqueca recheada com cebola roxa, carne bovina, alface, molho rose, tomate e maionese.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 27,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="panqueca"
-                                    data-name="Lanche Panqueca" data-price="27.90"
-                                    data-image="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Saudável -->
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/salada.jpg}"  alt="Salada Fit" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Salada Fit</h3>
-                        <p class="product-description">
-                            Salada com alface, grão de bico, frango em cubos, tomate cereja e cenoura.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 19,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="saladafit"
-                                    data-name="Salada Fit" data-price="19.90"
-                                    data-image="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/tapioca.jpg}"  alt="Crepioca" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Crepioca de Espinafre</h3>
-                        <p class="product-description">
-                            Crepioca recheada com frango desfiado com cenoura e molho rose.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 22,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="crepioca"
-                                    data-name="Crepioca de Espinafre" data-price="22.90"
-                                    data-image="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/pao de queijo.jpg}"  alt="Pão de Queijo" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Pão de Queijo sem Glúten</h3>
-                        <p class="product-description">
-                            Sem glúten ou derivados.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 12,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="paodequeijo"
-                                    data-name="Pão de Queijo sem Glúten" data-price="12.90"
-                                    data-image="https://images.unsplash.com/photo-1585362891753-85e8c36e3c4d?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Produtos -->
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/melica.jpg}" alt="Pó de Café" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Pó de Café Melita</h3>
-                        <p class="product-description">
-                            Aqui disponibilizamos o nosso café premium para você levar para casa.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 24,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="cafemelita"
-                                    data-name="Pó de Café Melita" data-price="24.90"
-                                    data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b3f4?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/mel.jpg}" alt="Mel Favo" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Mel Favo</h3>
-                        <p class="product-description">
-                            Mel artesanal de qualidade premium.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 34,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="melfavo"
-                                    data-name="Mel Favo" data-price="34.90"
-                                    data-image="https://images.unsplash.com/photo-1587049352861-d64a45a1a644?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <article class="card product-card">
-                    <img th:src="@{/img/copo.jpg}" src="/img/copo-termico.jpg" alt="Copo Térmico" class="card-img-top">
-                    <div class="card-body d-flex flex-column">
-                        <h3>Copo Térmico Bloom Coffee</h3>
-                        <p class="product-description">
-                            Copos térmicos da marca Bloom Coffee para manter sua bebida na temperatura ideal.
-                        </p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="product-price">R$ 25,90</span>
-                            <button class="btn btn-coffee btn-sm adicionar-produto" data-id="copotermico"
-                                    data-name="Copo Térmico Bloom Coffee" data-price="25.90"
-                                    data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b3f4?auto=format&fit=crop&w=900&q=85">
-                                Adicionar
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            </div>
         </div>
 
         <section class="container pb-5 mt-5">
             <div class="form-section p-4 p-md-5">
+
                 <div class="mb-4">
                     <h2 class="section-title">Informações para entrega</h2>
                     <p class="section-subtitle mb-0">
@@ -493,38 +161,41 @@
                 </div>
 
                 <form id="pedidoForm" class="needs-validation" novalidate>
+
                     <div class="row g-3">
+
                         <div class="col-md-6">
                             <label for="nome" class="form-label">Nome completo</label>
-                            <input type="text" class="form-control" id="nome" placeholder="Digite seu nome"
-                                   required>
+                            <input type="text" class="form-control" id="nome"
+                                   placeholder="Digite seu nome" required>
                             <div class="invalid-feedback">Informe seu nome completo.</div>
                         </div>
 
                         <div class="col-md-6">
                             <label for="telefone" class="form-label">Telefone</label>
-                            <input type="tel" class="form-control" id="telefone" placeholder="(00) 00000-0000"
-                                   required>
+                            <input type="tel" class="form-control" id="telefone"
+                                   placeholder="(00) 00000-0000" required>
                             <div class="invalid-feedback">Informe seu telefone.</div>
                         </div>
 
                         <div class="col-12">
                             <label for="email" class="form-label">E-mail</label>
-                            <input type="email" class="form-control" id="email" placeholder="seuemail@exemplo.com"
-                                   required>
+                            <input type="email" class="form-control" id="email"
+                                   placeholder="seuemail@exemplo.com" required>
                             <div class="invalid-feedback">Informe um e-mail válido.</div>
                         </div>
 
                         <div class="col-md-8">
                             <label for="rua" class="form-label">Rua ou avenida</label>
-                            <input type="text" class="form-control" id="rua" placeholder="Nome da rua ou avenida"
-                                   required>
+                            <input type="text" class="form-control" id="rua"
+                                   placeholder="Nome da rua ou avenida" required>
                             <div class="invalid-feedback">Informe o endereço.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="numero" class="form-label">Número</label>
-                            <input type="text" class="form-control" id="numero" placeholder="Número" required>
+                            <input type="text" class="form-control" id="numero"
+                                   placeholder="Número" required>
                             <div class="invalid-feedback">Informe o número.</div>
                         </div>
 
@@ -536,19 +207,22 @@
 
                         <div class="col-md-4">
                             <label for="bairro" class="form-label">Bairro</label>
-                            <input type="text" class="form-control" id="bairro" placeholder="Seu bairro" required>
+                            <input type="text" class="form-control" id="bairro"
+                                   placeholder="Seu bairro" required>
                             <div class="invalid-feedback">Informe o bairro.</div>
                         </div>
 
                         <div class="col-md-3">
                             <label for="cep" class="form-label">CEP</label>
-                            <input type="text" class="form-control" id="cep" placeholder="00000-000" required>
+                            <input type="text" class="form-control" id="cep"
+                                   placeholder="00000-000" required>
                             <div class="invalid-feedback">Informe o CEP.</div>
                         </div>
 
                         <div class="col-md-6">
                             <label for="cidade" class="form-label">Cidade</label>
-                            <input type="text" class="form-control" id="cidade" placeholder="Sua cidade" required>
+                            <input type="text" class="form-control" id="cidade"
+                                   placeholder="Sua cidade" required>
                             <div class="invalid-feedback">Informe a cidade.</div>
                         </div>
 
@@ -568,30 +242,34 @@
                             <textarea class="form-control" id="observacoes" rows="3"
                                       placeholder="Ex.: retirar algum ingrediente ou adicionar talher"></textarea>
                         </div>
+
                     </div>
 
                     <div class="questionnaire p-4 mt-4">
                         <h3 class="h5 mb-3">Conte um pouco sobre sua experiência</h3>
 
                         <p class="mb-2 fw-semibold">É sua primeira visita ao Bloom Coffee?</p>
+
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="primeiraVisita" id="visitaSim"
-                                   value="sim" required>
+                            <input class="form-check-input" type="radio" name="primeiraVisita"
+                                   id="visitaSim" value="sim" required>
                             <label class="form-check-label" for="visitaSim">Sim</label>
                         </div>
+
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="primeiraVisita" id="visitaNao"
-                                   value="nao">
+                            <input class="form-check-input" type="radio" name="primeiraVisita"
+                                   id="visitaNao" value="nao">
                             <label class="form-check-label" for="visitaNao">Não</label>
                         </div>
 
                         <p class="mb-2 mt-4 fw-semibold">Como conheceu a cafeteria?</p>
+
                         <select class="form-select" id="origem" required>
                             <option value="" selected disabled>Selecione uma opção</option>
-                            <option>Redes sociais</option>
-                            <option>Indicação de amigos</option>
-                            <option>Pesquisa na internet</option>
-                            <option>Já conhecia o local</option>
+                            <option value="Redes sociais">Redes sociais</option>
+                            <option value="Indicação de amigos">Indicação de amigos</option>
+                            <option value="Pesquisa na internet">Pesquisa na internet</option>
+                            <option value="Já conhecia o local">Já conhecia o local</option>
                         </select>
                         <div class="invalid-feedback">Selecione uma opção.</div>
 
@@ -607,9 +285,11 @@
                     <button class="btn btn-order btn-lg w-100 mt-4" type="submit">
                         Finalizar pedido
                     </button>
+
                 </form>
             </div>
         </section>
+
     </section>
 
 </main>
@@ -621,11 +301,15 @@
     </div>
 </footer>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="carrinhoOffcanvas" aria-labelledby="carrinhoTitulo">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="carrinhoOffcanvas"
+     aria-labelledby="carrinhoTitulo">
+
     <div class="offcanvas-header">
         <h2 class="offcanvas-title h4" id="carrinhoTitulo">Seu carrinho 🛒</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                aria-label="Fechar"></button>
     </div>
+
     <div class="offcanvas-body">
         <div id="cartItems">
             <div class="empty-cart">Seu carrinho está vazio.</div>
@@ -647,14 +331,17 @@
                 <strong id="cartTotal">R$ 0,00</strong>
             </div>
 
-            <button class="btn btn-order w-100 mt-4" data-bs-dismiss="offcanvas">
+            <button class="btn btn-order w-100 mt-4" type="button"
+                    data-bs-dismiss="offcanvas">
                 Continuar pedido
             </button>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="sucessoModal" tabindex="-1" aria-labelledby="sucessoModalLabel" aria-hidden="true">
+<div class="modal fade" id="sucessoModal" tabindex="-1"
+     aria-labelledby="sucessoModalLabel" aria-hidden="true">
+
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 rounded-4">
             <div class="modal-body text-center p-5">
@@ -663,7 +350,8 @@
                 <p class="text-muted">
                     Obrigado por pedir no Bloom Coffee. Seu pedido será preparado com muito carinho.
                 </p>
-                <button type="button" class="btn btn-order px-4" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-order px-4"
+                        data-bs-dismiss="modal">
                     Fechar
                 </button>
             </div>
@@ -677,14 +365,18 @@
 
 <script>
     const carrinho = [];
+
     const cartItems = document.getElementById("cartItems");
     const cartBadge = document.getElementById("cartBadge");
     const cartSubtotal = document.getElementById("cartSubtotal");
+    const cartDelivery = document.getElementById("cartDelivery");
     const cartTotal = document.getElementById("cartTotal");
+    const pedidoForm = document.getElementById("pedidoForm");
+
     const taxaEntrega = 5;
 
     function formatarMoeda(valor) {
-        return valor.toLocaleString("pt-BR", {
+        return Number(valor).toLocaleString("pt-BR", {
             style: "currency",
             currency: "BRL"
         });
@@ -694,13 +386,13 @@
         cartItems.innerHTML = "";
 
         if (carrinho.length === 0) {
-            cartItems.innerHTML = `
-                    <div class="empty-cart">Seu carrinho está vazio.</div>
-                `;
+            cartItems.innerHTML =
+                '<div class="empty-cart">Seu carrinho está vazio.</div>';
 
             cartBadge.textContent = "0";
-            cartSubtotal.textContent = "R$ 0,00";
-            cartTotal.textContent = "R$ 0,00";
+            cartSubtotal.textContent = formatarMoeda(0);
+            cartDelivery.textContent = formatarMoeda(taxaEntrega);
+            cartTotal.textContent = formatarMoeda(0);
             return;
         }
 
@@ -716,55 +408,97 @@
             const item = document.createElement("div");
             item.className = "cart-item";
 
-            item.innerHTML = `
-                    <div class="d-flex gap-3">
-                        <img src="${produto.image}" alt="${produto.name}">
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between gap-2">
-                                <strong>${produto.name}</strong>
-                                <button class="btn btn-sm text-danger p-0"
-                                    onclick="removerProduto(${index})"
-                                    aria-label="Remover ${produto.name}">
-                                    ×
-                                </button>
-                            </div>
+            const linha = document.createElement("div");
+            linha.className = "d-flex gap-3";
 
-                            <small class="text-muted">${formatarMoeda(produto.price)} cada</small>
+            if (produto.image) {
+                const imagem = document.createElement("img");
+                imagem.src = produto.image;
+                imagem.alt = produto.name;
+                imagem.onerror = () => imagem.remove();
+                linha.appendChild(imagem);
+            }
 
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="quantity-control">
-                                    <button onclick="alterarQuantidade(${index}, -1)">−</button>
-                                    <span>${produto.quantity}</span>
-                                    <button onclick="alterarQuantidade(${index}, 1)">+</button>
-                                </div>
+            const conteudo = document.createElement("div");
+            conteudo.className = "flex-grow-1";
 
-                                <strong>${formatarMoeda(totalProduto)}</strong>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            const cabecalho = document.createElement("div");
+            cabecalho.className = "d-flex justify-content-between gap-2";
 
+            const nome = document.createElement("strong");
+            nome.textContent = produto.name;
+
+            const remover = document.createElement("button");
+            remover.type = "button";
+            remover.className = "btn btn-sm text-danger p-0";
+            remover.textContent = "×";
+            remover.setAttribute("aria-label", "Remover " + produto.name);
+            remover.addEventListener("click", () => removerProduto(index));
+
+            cabecalho.append(nome, remover);
+
+            const preco = document.createElement("small");
+            preco.className = "text-muted";
+            preco.textContent = formatarMoeda(produto.price) + " cada";
+
+            const rodape = document.createElement("div");
+            rodape.className =
+                "d-flex justify-content-between align-items-center mt-2";
+
+            const controles = document.createElement("div");
+            controles.className = "quantity-control";
+
+            const diminuir = document.createElement("button");
+            diminuir.type = "button";
+            diminuir.textContent = "−";
+            diminuir.setAttribute("aria-label", "Diminuir quantidade");
+            diminuir.addEventListener("click", () => alterarQuantidade(index, -1));
+
+            const quantidade = document.createElement("span");
+            quantidade.textContent = produto.quantity;
+
+            const aumentar = document.createElement("button");
+            aumentar.type = "button";
+            aumentar.textContent = "+";
+            aumentar.setAttribute("aria-label", "Aumentar quantidade");
+            aumentar.addEventListener("click", () => alterarQuantidade(index, 1));
+
+            controles.append(diminuir, quantidade, aumentar);
+
+            const total = document.createElement("strong");
+            total.textContent = formatarMoeda(totalProduto);
+
+            rodape.append(controles, total);
+            conteudo.append(cabecalho, preco, rodape);
+            linha.appendChild(conteudo);
+            item.appendChild(linha);
             cartItems.appendChild(item);
         });
 
         cartBadge.textContent = quantidadeTotal;
         cartSubtotal.textContent = formatarMoeda(subtotal);
+        cartDelivery.textContent = formatarMoeda(taxaEntrega);
         cartTotal.textContent = formatarMoeda(subtotal + taxaEntrega);
     }
 
     function adicionarProduto(produto) {
-        const produtoExistente = carrinho.find(item => item.id === produto.id);
+        const existente = carrinho.find(item => item.id === produto.id);
 
-        if (produtoExistente) {
-            produtoExistente.quantity++;
+        if (existente) {
+            existente.quantity++;
         } else {
-            carrinho.push({ ...produto, quantity: 1 });
+            carrinho.push({
+                ...produto,
+                quantity: 1
+            });
         }
 
         atualizarCarrinho();
     }
 
     function alterarQuantidade(index, quantidade) {
+        if (!carrinho[index]) return;
+
         carrinho[index].quantity += quantidade;
 
         if (carrinho[index].quantity <= 0) {
@@ -791,16 +525,16 @@
             adicionarProduto(produto);
 
             botao.textContent = "Adicionado ✓";
+            botao.disabled = true;
 
             setTimeout(() => {
                 botao.textContent = "Adicionar";
+                botao.disabled = false;
             }, 1200);
         });
     });
 
-    const pedidoForm = document.getElementById("pedidoForm");
-
-    pedidoForm.addEventListener("submit", event => {
+    pedidoForm.addEventListener("submit", async event => {
         event.preventDefault();
 
         if (carrinho.length === 0) {
@@ -809,26 +543,90 @@
         }
 
         if (!pedidoForm.checkValidity()) {
-            event.stopPropagation();
             pedidoForm.classList.add("was-validated");
+            pedidoForm.reportValidity();
             return;
         }
 
-        pedidoForm.classList.add("was-validated");
+        const visita = document.querySelector(
+            'input[name="primeiraVisita"]:checked'
+        );
 
-        const modal = new bootstrap.Modal(document.getElementById("sucessoModal"));
-        modal.show();
+        const pedido = {
+            nome: document.getElementById("nome").value.trim(),
+            telefone: document.getElementById("telefone").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            rua: document.getElementById("rua").value.trim(),
+            numero: document.getElementById("numero").value.trim(),
+            complemento: document.getElementById("complemento").value.trim(),
+            bairro: document.getElementById("bairro").value.trim(),
+            cep: document.getElementById("cep").value.trim(),
+            cidade: document.getElementById("cidade").value.trim(),
+            pagamento: document.getElementById("pagamento").value,
+            observacoes: document.getElementById("observacoes").value.trim(),
+            primeiraVisita: visita ? visita.value : null,
+            origem: document.getElementById("origem").value,
+            itens: carrinho.map(produto => ({
+                produtoId: Number(produto.id),
+                quantidade: produto.quantity
+            }))
+        };
 
-        pedidoForm.reset();
-        pedidoForm.classList.remove("was-validated");
+        const token = document.querySelector('meta[name="_csrf"]')?.content;
+        const nomeCabecalho = document.querySelector(
+            'meta[name="_csrf_header"]'
+        )?.content;
 
-        carrinho.length = 0;
-        atualizarCarrinho();
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        };
+
+        if (token && nomeCabecalho) {
+            headers[nomeCabecalho] = token;
+        }
+
+        const botao = pedidoForm.querySelector('button[type="submit"]');
+        botao.disabled = true;
+        botao.textContent = "Enviando pedido...";
+
+        try {
+            const resposta = await fetch("/pedidos/finalizar", {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(pedido)
+            });
+
+            if (!resposta.ok) {
+                throw new Error("O servidor não conseguiu registrar o pedido.");
+            }
+
+            carrinho.length = 0;
+            atualizarCarrinho();
+
+            pedidoForm.reset();
+            pedidoForm.classList.remove("was-validated");
+
+            bootstrap.Modal.getOrCreateInstance(
+                document.getElementById("sucessoModal")
+            ).show();
+
+        } catch (erro) {
+            console.error("Erro ao enviar pedido:", erro);
+
+            alert(
+                "Não foi possível finalizar o pedido. " +
+                "Tente novamente. Seus produtos continuam no carrinho."
+            );
+        } finally {
+            botao.disabled = false;
+            botao.textContent = "Finalizar pedido";
+        }
     });
 
     atualizarCarrinho();
 </script>
 
 </body>
-
 </html>
+

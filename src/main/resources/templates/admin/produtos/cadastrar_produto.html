@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Produto | Bloom Coffee</title>
+    <link rel="stylesheet" th:href="@{/css/cadastroProduto.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Cadastrar Produto</h1>
+    <p>Bloom Coffee — Gestão de produtos</p>
+
+    <p class="sucesso"
+       th:if="${sucesso}"
+       th:text="${sucesso}">
+    </p>
+
+    <form th:action="@{/admin/produtos/salvar}"
+          th:object="${produto}"
+          method="post">
+
+        <label for="nome">Nome do produto</label>
+        <input type="text" id="nome"
+               th:field="*{nome}"
+               maxlength="100" required>
+
+        <label for="categoria">Categoria</label>
+        <select id="categoria" th:field="*{categoria}" required>
+            <option value="">Selecione uma categoria</option>
+            <option value="Bebidas quentes">Bebidas quentes</option>
+            <option value="Bebidas geladas">Bebidas geladas</option>
+            <option value="Doces">Doces</option>
+            <option value="Salgados">Salgados</option>
+            <option value="Saudáveis">Saudáveis</option>
+            <option value="Produtos">Produtos</option>
+        </select>
+
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao"
+                  th:field="*{descricao}"
+                  maxlength="500"
+                  rows="4"></textarea>
+
+        <label for="preco">Preço (R$)</label>
+        <input type="number" id="preco"
+               th:field="*{preco}"
+               min="0.01" step="0.01" required>
+
+        <label for="arquivoImagem">Caminho da imagem</label>
+        <input type="text" id="arquivoImagem"
+               th:field="*{arquivoImagem}"
+               maxlength="255"
+               placeholder="img/espresso.jpg">
+
+        <div class="disponivel">
+            <input type="checkbox" id="disponivel"
+                   th:field="*{disponivel}">
+            <label for="disponivel">Produto disponível para venda</label>
+        </div>
+
+        <button type="submit">Salvar produto</button>
+    </form>
+
+</div>
+
+</body>
+</html>
