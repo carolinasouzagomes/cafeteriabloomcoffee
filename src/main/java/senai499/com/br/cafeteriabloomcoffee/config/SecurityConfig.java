@@ -9,7 +9,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -26,7 +25,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Administrador criado diretamente no sistema
+    // Administrador criado diretamente no sistema.
     @Bean
     public UserDetails adminUser(PasswordEncoder passwordEncoder) {
         return User.builder()
@@ -36,7 +35,7 @@ public class SecurityConfig {
                 .build();
     }
 
-    // Serviço que reconhece tanto o administrador quanto os clientes
+    // Reconhece o administrador e os clientes cadastrados.
     @Bean
     public UserDetailsService userDetailsService(
             ClienteDetailsService clienteDetailsService,
@@ -67,13 +66,17 @@ public class SecurityConfig {
         return new ProviderManager(provider);
     }
 
+    // Configuração principal de segurança.
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            AuthenticationManager authenticationManager) throws Exception {
+            AuthenticationManager authenticationManager,
+            CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler)
+            throws Exception {
 
         http
                 .authenticationManager(authenticationManager)
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/login",
@@ -83,18 +86,25 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/img/**"
                         ).permitAll()
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Exige login para finalizar um pedido.
+                        .requestMatchers("/pedidos/finalizar").authenticated()
+
                         .anyRequest().permitAll()
                 )
+
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("senha")
-                        .defaultSuccessUrl("/admin/", true)
+                        .successHandler(customAuthenticationSuccessHandler)
                         .failureUrl("/login?error")
                         .permitAll()
                 )
+
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()

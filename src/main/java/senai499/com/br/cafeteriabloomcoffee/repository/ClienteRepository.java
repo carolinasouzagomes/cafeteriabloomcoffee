@@ -6,6 +6,7 @@ import senai499.com.br.cafeteriabloomcoffee.model.Cliente;
 
 import java.util.Optional;
 
+
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     Optional<Cliente> findByEmail(String email);
@@ -16,6 +17,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     boolean existsByCpf(String cpf);
 }
+
+
 
 
 

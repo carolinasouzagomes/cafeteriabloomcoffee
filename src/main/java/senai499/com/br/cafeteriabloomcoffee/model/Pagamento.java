@@ -25,19 +25,17 @@ public class Pagamento {
     @Column(name = "data_pagamento")
     private LocalDate dataPagamento;
 
-    // Construtor vazio
-    public Pagamento() {
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_pedido", nullable = false, unique = true)
+    private Pedido pedido;
+
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    // Construtor completo
-    public Pagamento(String metodoPagamento, String statusPagamento,
-                     BigDecimal valorPago, LocalDate dataPagamento) {
-        this.metodoPagamento = metodoPagamento;
-        this.statusPagamento = statusPagamento;
-        this.valorPago = valorPago;
-        this.dataPagamento = dataPagamento;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
-
     // Getters e Setters
 
     public Long getIdPagamento() {

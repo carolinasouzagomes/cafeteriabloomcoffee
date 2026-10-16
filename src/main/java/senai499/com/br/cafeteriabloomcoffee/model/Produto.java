@@ -7,6 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import jakarta.persistence.OneToMany;
 
 import java.math.BigDecimal;
 
@@ -35,6 +38,13 @@ public class Produto {
 
     @Column(nullable = false)
     private Boolean disponivel = true;
+
+    @OneToMany(mappedBy = "produto")
+    private List<ItemPedido> itensPedido = new ArrayList<>();
+
+    public List<ItemPedido> getItensPedido() {
+        return itensPedido;
+    }
 
     // Construtor vazio
     public Produto() {

@@ -10,6 +10,7 @@
     <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}">
     <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : 'X-CSRF-TOKEN'}">
 
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
@@ -266,10 +267,10 @@
 
                         <select class="form-select" id="origem" required>
                             <option value="" selected disabled>Selecione uma opção</option>
-                            <option value="Redes sociais">Redes sociais</option>
-                            <option value="Indicação de amigos">Indicação de amigos</option>
-                            <option value="Pesquisa na internet">Pesquisa na internet</option>
-                            <option value="Já conhecia o local">Já conhecia o local</option>
+                            <option value="redes_sociais">Redes sociais</option>
+                            <option value="indicacao">Indicação de amigos</option>
+                            <option value="internet">Pesquisa na internet</option>
+                            <option value="local">Já conhecia o local</option>
                         </select>
                         <div class="invalid-feedback">Selecione uma opção.</div>
 
@@ -534,6 +535,7 @@
         });
     });
 
+
     pedidoForm.addEventListener("submit", async event => {
         event.preventDefault();
 
@@ -552,7 +554,13 @@
             'input[name="primeiraVisita"]:checked'
         );
 
-        const pedido = {
+        if (!visita) {
+            alert("Informe se esta é sua primeira visita ao Bloom Coffee.");
+            return;
+        }
+
+        // Monta os dados no formato esperado pelo PedidoRequest.
+        const dadosPedido = {
             nome: document.getElementById("nome").value.trim(),
             telefone: document.getElementById("telefone").value.trim(),
             email: document.getElementById("email").value.trim(),
@@ -564,15 +572,20 @@
             cidade: document.getElementById("cidade").value.trim(),
             pagamento: document.getElementById("pagamento").value,
             observacoes: document.getElementById("observacoes").value.trim(),
-            primeiraVisita: visita ? visita.value : null,
+            primeiraVisita: visita.value,
             origem: document.getElementById("origem").value,
+
             itens: carrinho.map(produto => ({
                 produtoId: Number(produto.id),
-                quantidade: produto.quantity
+                quantidade: Number(produto.quantity)
             }))
         };
 
-        const token = document.querySelector('meta[name="_csrf"]')?.content;
+        // Obtém o token CSRF gerado pelo Spring Security.
+        const token = document.querySelector(
+            'meta[name="_csrf"]'
+        )?.content;
+
         const nomeCabecalho = document.querySelector(
             'meta[name="_csrf_header"]'
         )?.content;
@@ -586,7 +599,10 @@
             headers[nomeCabecalho] = token;
         }
 
-        const botao = pedidoForm.querySelector('button[type="submit"]');
+        const botao = pedidoForm.querySelector(
+            'button[type="submit"]'
+        );
+
         botao.disabled = true;
         botao.textContent = "Enviando pedido...";
 
@@ -594,35 +610,84 @@
             const resposta = await fetch("/pedidos/finalizar", {
                 method: "POST",
                 headers: headers,
-                body: JSON.stringify(pedido)
+                body: JSON.stringify(dadosPedido),
+                credentials: "same-origin"
             });
 
-            if (!resposta.ok) {
-                throw new Error("O servidor não conseguiu registrar o pedido.");
+            // Lê a resposta mesmo quando o servidor retorna um erro.
+            const tipoConteudo = resposta.headers.get("content-type") || "";
+            let resultado = {};
+
+            if (tipoConteudo.includes("application/json")) {
+                resultado = await resposta.json();
+            } else {
+                const texto = await resposta.text();
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        resposta.status === 401
+                            ? "Entre na sua conta para finalizar o pedido."
+                            : resposta.status === 403
+                                ? "A solicitação foi bloqueada. Atualize a página e tente novamente."
+                                : `Erro do servidor (${resposta.status}). Verifique o console.`
+                    );
+                }
+
+                throw new Error(
+                    "O servidor não retornou uma confirmação válida do pedido."
+                );
             }
 
+            if (!resposta.ok) {
+                throw new Error(
+                    resultado.mensagem ||
+                    resultado.message ||
+                    `Não foi possível registrar o pedido (${resposta.status}).`
+                );
+            }
+
+            // Só limpa o carrinho depois da confirmação do servidor.
             carrinho.length = 0;
             atualizarCarrinho();
 
             pedidoForm.reset();
             pedidoForm.classList.remove("was-validated");
 
+            // Exibe a confirmação e o número do pedido, se disponível.
+            const titulo = document.getElementById("sucessoModalLabel");
+            const modalTexto = document.querySelector(
+                "#sucessoModal .modal-body p"
+            );
+
+            if (titulo) {
+                titulo.textContent = resultado.idPedido
+                    ? `Pedido #${resultado.idPedido} recebido!`
+                    : "Pedido recebido!";
+            }
+
+            if (modalTexto) {
+                modalTexto.textContent = resultado.mensagem ||
+                    "Obrigado por pedir no Bloom Coffee. Seu pedido será preparado com muito carinho.";
+            }
+
             bootstrap.Modal.getOrCreateInstance(
                 document.getElementById("sucessoModal")
             ).show();
 
         } catch (erro) {
-            console.error("Erro ao enviar pedido:", erro);
+            console.error("Erro ao finalizar pedido:", erro);
 
             alert(
-                "Não foi possível finalizar o pedido. " +
-                "Tente novamente. Seus produtos continuam no carrinho."
+                erro.message ||
+                "Não foi possível finalizar o pedido. Tente novamente. Seus produtos continuam no carrinho."
             );
+
         } finally {
             botao.disabled = false;
             botao.textContent = "Finalizar pedido";
         }
     });
+
 
     atualizarCarrinho();
 </script>
