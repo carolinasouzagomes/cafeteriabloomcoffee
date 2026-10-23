@@ -1,17 +1,10 @@
 
 package senai499.com.br.cafeteriabloomcoffee.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.OneToMany;
-
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "produto")
@@ -19,6 +12,7 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_produto")
     private Long idProduto;
 
     @Column(nullable = false, length = 100)
@@ -33,7 +27,7 @@ public class Produto {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
 
-    @Column(length = 255)
+    @Column(name = "arquivo_imagem", length = 255)
     private String arquivoImagem;
 
     @Column(nullable = false)
@@ -42,18 +36,17 @@ public class Produto {
     @OneToMany(mappedBy = "produto")
     private List<ItemPedido> itensPedido = new ArrayList<>();
 
-    public List<ItemPedido> getItensPedido() {
-        return itensPedido;
-    }
-
-    // Construtor vazio
     public Produto() {
     }
 
-    // Construtor completo
-    public Produto(String nome, String descricao,
-                   String categoria, BigDecimal preco,
-                   String arquivoImagem, Boolean disponivel) {
+    public Produto(
+            String nome,
+            String descricao,
+            String categoria,
+            BigDecimal preco,
+            String arquivoImagem,
+            Boolean disponivel
+    ) {
         this.nome = nome;
         this.descricao = descricao;
         this.categoria = categoria;
@@ -116,5 +109,15 @@ public class Produto {
 
     public void setDisponivel(Boolean disponivel) {
         this.disponivel = disponivel;
+    }
+
+    public List<ItemPedido> getItensPedido() {
+        return itensPedido;
+    }
+
+    public void setItensPedido(List<ItemPedido> itensPedido) {
+        this.itensPedido = itensPedido != null
+                ? itensPedido
+                : new ArrayList<>();
     }
 }

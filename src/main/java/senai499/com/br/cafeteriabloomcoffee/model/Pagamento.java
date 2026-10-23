@@ -11,32 +11,44 @@ public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pagamento")
     private Long idPagamento;
 
-    @Column(name = "metodo_pagamento", nullable = false, length = 50)
+    @Column(
+            name = "metodo_pagamento",
+            nullable = false,
+            length = 50
+    )
     private String metodoPagamento;
 
-    @Column(name = "status_pagamento", nullable = false, length = 30)
+    @Column(
+            name = "status_pagamento",
+            nullable = false,
+            length = 30
+    )
     private String statusPagamento;
 
-    @Column(name = "valor_pago", nullable = false, precision = 10, scale = 2)
+    @Column(
+            name = "valor_pago",
+            nullable = false,
+            precision = 10,
+            scale = 2
+    )
     private BigDecimal valorPago;
 
     @Column(name = "data_pagamento")
     private LocalDate dataPagamento;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_pedido", nullable = false, unique = true)
+    @JoinColumn(
+            name = "id_pedido",
+            nullable = false,
+            unique = true
+    )
     private Pedido pedido;
 
-    public Pedido getPedido() {
-        return pedido;
+    public Pagamento() {
     }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
-    }
-    // Getters e Setters
 
     public Long getIdPagamento() {
         return idPagamento;
@@ -76,5 +88,13 @@ public class Pagamento {
 
     public void setDataPagamento(LocalDate dataPagamento) {
         this.dataPagamento = dataPagamento;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 }

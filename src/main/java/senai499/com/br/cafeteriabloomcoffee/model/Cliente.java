@@ -1,18 +1,14 @@
+
 package senai499.com.br.cafeteriabloomcoffee.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
 import java.util.ArrayList;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.List;
 
 @Entity
 @Table(name = "cliente")
-public class Cliente implements UserDetails {
+public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +23,6 @@ public class Cliente implements UserDetails {
     @Column(length = 20)
     private String telefone;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
-
-    @Column(nullable = false, length = 100)
-    private String senha;
-
     @Column(length = 150)
     private String endereco;
 
@@ -45,8 +35,13 @@ public class Cliente implements UserDetails {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    @Column(nullable = false)
-    private boolean ativo = true;
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "id_usuario",
+            nullable = false,
+            unique = true
+    )
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
@@ -54,13 +49,6 @@ public class Cliente implements UserDetails {
     public Cliente() {
     }
 
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
     public Long getId() {
         return id;
     }
@@ -91,22 +79,6 @@ public class Cliente implements UserDetails {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public String getEndereco() {
@@ -141,46 +113,34 @@ public class Cliente implements UserDetails {
         this.dataNascimento = dataNascimento;
     }
 
-    public boolean isAtivo() {
-        return ativo;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+    public String getEmail() {
+        return usuario != null ? usuario.getEmail() : null;
     }
 
-    @Override
-    public String getPassword() {
-        return senha;
+    public void setEmail(String email) {
+        if (usuario == null) {
+            usuario = new Usuario();
+            usuario.setPerfil(PerfilUsuario.CLIENTE);
+        }
+
+        usuario.setEmail(email);
     }
 
-    @Override
-    public String getUsername() {
-        return email;
+    public List<Pedido> getPedidos() {
+        return pedidos;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return ativo;
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos != null
+                ? pedidos
+                : new ArrayList<>();
     }
 }

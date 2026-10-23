@@ -10,20 +10,26 @@ public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_item_pedido")
     private Long idItemPedido;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_pedido", nullable = false)
     private Pedido pedido;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_produto", nullable = false)
     private Produto produto;
 
     @Column(nullable = false)
     private Integer quantidade;
 
-    @Column(name = "preco_unitario", nullable = false, precision = 10, scale = 2)
+    @Column(
+            name = "preco_unitario",
+            nullable = false,
+            precision = 10,
+            scale = 2
+    )
     private BigDecimal precoUnitario;
 
     @Column(nullable = false, precision = 10, scale = 2)

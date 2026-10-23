@@ -13,7 +13,9 @@ import senai499.com.br.cafeteriabloomcoffee.model.Cliente;
 import senai499.com.br.cafeteriabloomcoffee.model.ItemPedido;
 import senai499.com.br.cafeteriabloomcoffee.model.Pagamento;
 import senai499.com.br.cafeteriabloomcoffee.model.Pedido;
+import senai499.com.br.cafeteriabloomcoffee.model.PerfilUsuario;
 import senai499.com.br.cafeteriabloomcoffee.model.Produto;
+import senai499.com.br.cafeteriabloomcoffee.model.Usuario;
 import senai499.com.br.cafeteriabloomcoffee.repository.ClienteRepository;
 import senai499.com.br.cafeteriabloomcoffee.repository.PagamentoRepository;
 import senai499.com.br.cafeteriabloomcoffee.repository.PedidoRepository;
@@ -39,10 +41,12 @@ public class PedidoService {
         this.pagamentoRepository = pagamentoRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Pedido> listarTodos() {
         return pedidoRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Optional<Pedido> buscarPorId(Long id) {
         return pedidoRepository.findById(id);
     }
@@ -53,47 +57,60 @@ public class PedidoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Pedido registrarPedido(PedidoRequest dados, Cliente clienteAutenticado) {
+    public Pedido registrarPedido(
+            PedidoRequest dados,
+            Usuario usuarioAutenticado) {
 
         validarDados(dados);
 
-        if (clienteAutenticado == null || clienteAutenticado.getId() == null) {
+        // Confere se existe um usuário autenticado.
+        if (usuarioAutenticado == null
+                || usuarioAutenticado.getIdUsuario() == null) {
+
             throw new IllegalArgumentException(
                     "Entre na sua conta para finalizar o pedido.");
         }
 
-        // Busca o cliente persistido pelo e-mail do login.
-        String emailLogin = clienteAutenticado.getUsername();
+        // Somente usuários com perfil CLIENTE podem comprar.
+        if (usuarioAutenticado.getPerfil() != PerfilUsuario.CLIENTE) {
+            throw new IllegalArgumentException(
+                    "Somente clientes podem realizar pedidos.");
+        }
 
-        Cliente cliente = clienteRepository.findByEmail(emailLogin)
+        // Localiza o cadastro de cliente vinculado ao usuário autenticado.
+        Cliente cliente = clienteRepository
+                .findByUsuarioIdUsuario(
+                        usuarioAutenticado.getIdUsuario())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Não foi possível localizar o cliente autenticado."));
 
         Pedido pedido = new Pedido();
 
-        // Relaciona o pedido ao cliente autenticado.
+        // Vincula o pedido ao cliente que está realmente autenticado.
         pedido.setCliente(cliente);
 
-        // Dados informados no formulário.
+        // Dados de entrega enviados pelo formulário.
         pedido.setNome(dados.getNome().trim());
         pedido.setTelefone(dados.getTelefone().trim());
         pedido.setEmail(dados.getEmail().trim());
         pedido.setRua(dados.getRua().trim());
         pedido.setNumero(dados.getNumero().trim());
-        pedido.setComplemento(textoOuNull(dados.getComplemento()));
+        pedido.setComplemento(
+                textoOuNull(dados.getComplemento()));
         pedido.setBairro(dados.getBairro().trim());
         pedido.setCep(dados.getCep().trim());
         pedido.setCidade(dados.getCidade().trim());
 
         pedido.setFormaPagamento(dados.getPagamento());
-        pedido.setObservacoes(textoOuNull(dados.getObservacoes()));
+        pedido.setObservacoes(
+                textoOuNull(dados.getObservacoes()));
         pedido.setPrimeiraVisita(dados.getPrimeiraVisita());
         pedido.setOrigem(dados.getOrigem());
         pedido.setStatus("PENDENTE");
 
         BigDecimal subtotalGeral = BigDecimal.ZERO;
 
-        // Cria os itens usando os preços cadastrados no banco.
+        // Calcula os itens com base nos preços do banco de dados.
         for (PedidoRequest.ItemRequest itemRequest : dados.getItens()) {
 
             if (itemRequest == null
@@ -119,7 +136,9 @@ public class PedidoService {
 
             BigDecimal precoUnitario = produto.getPreco();
 
-            if (precoUnitario == null || precoUnitario.signum() < 0) {
+            if (precoUnitario == null
+                    || precoUnitario.signum() < 0) {
+
                 throw new IllegalArgumentException(
                         "O produto " + produto.getNome()
                                 + " possui um preço inválido.");
@@ -128,7 +147,8 @@ public class PedidoService {
             BigDecimal quantidade = BigDecimal.valueOf(
                     itemRequest.getQuantidade());
 
-            BigDecimal subtotalItem = precoUnitario.multiply(quantidade);
+            BigDecimal subtotalItem =
+                    precoUnitario.multiply(quantidade);
 
             ItemPedido item = new ItemPedido();
             item.setProduto(produto);
@@ -136,32 +156,27 @@ public class PedidoService {
             item.setPrecoUnitario(precoUnitario);
             item.setSubtotal(subtotalItem);
 
-            // Define também a referência do item para o pedido.
+            // O método também vincula o item ao pedido.
             pedido.adicionarItem(item);
 
             subtotalGeral = subtotalGeral.add(subtotalItem);
         }
 
-        // Taxa de entrega configurada no projeto.
+        // Taxa de entrega definida pelo projeto.
         BigDecimal taxaEntrega = new BigDecimal("5.00");
 
         pedido.setTaxaEntrega(taxaEntrega);
         pedido.setTotalPreco(subtotalGeral.add(taxaEntrega));
 
-        /*
-         * O relacionamento Pedido.itens deve ter cascade = CascadeType.ALL
-         * para que os ItemPedido sejam salvos junto com o Pedido.
-         */
+        // Salva o pedido e seus itens por meio do cascade da entidade Pedido.
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
-        // Cria o pagamento vinculado ao pedido.
+        // Cria o registro de pagamento vinculado ao pedido.
         Pagamento pagamento = new Pagamento();
         pagamento.setPedido(pedidoSalvo);
         pagamento.setMetodoPagamento(dados.getPagamento());
         pagamento.setStatusPagamento("PENDENTE");
         pagamento.setValorPago(pedidoSalvo.getTotalPreco());
-
-        // A data será preenchida quando o pagamento for confirmado.
         pagamento.setDataPagamento(null);
 
         pagamentoRepository.save(pagamento);
@@ -218,8 +233,10 @@ public class PedidoService {
                     "O pedido deve conter entre 1 e 50 itens.");
         }
     }
+
     private boolean origemValida(String origem) {
-        return origem != null && List.of(
+        return origem != null
+                && List.of(
                 "redes_sociais",
                 "indicacao",
                 "internet",
