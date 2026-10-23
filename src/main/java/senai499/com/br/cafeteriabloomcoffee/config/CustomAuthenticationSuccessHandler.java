@@ -27,10 +27,28 @@ public class CustomAuthenticationSuccessHandler
                 .anyMatch(authority ->
                         authority.getAuthority().equals("ROLE_ADMIN"));
 
+        boolean isFuncionario = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_FUNCIONARIO"));
+
+        boolean isCliente = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_CLIENTE"));
+
         if (isAdmin) {
-            response.sendRedirect("/admin/");
+            response.sendRedirect(
+                    request.getContextPath() + "/admin/");
+        } else if (isFuncionario) {
+            response.sendRedirect(
+                    request.getContextPath() + "/funcionario/");
+        } else if (isCliente) {
+            response.sendRedirect(
+                    request.getContextPath() + "/cardapio");
         } else {
-            response.sendRedirect("/cardapio");
+            response.sendRedirect(
+                    request.getContextPath() + "/login?error");
         }
     }
 }

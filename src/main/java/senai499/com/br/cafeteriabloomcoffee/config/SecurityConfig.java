@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,29 +38,42 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             AuthenticationManager authenticationManager,
-            CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler)
+            CustomAuthenticationSuccessHandler successHandler)
             throws Exception {
 
         http
                 .authenticationManager(authenticationManager)
 
                 .authorizeHttpRequests(auth -> auth
+
+                        // Páginas públicas e recursos estáticos
                         .requestMatchers(
+                                "/",
                                 "/login",
                                 "/cadastro",
                                 "/css/**",
                                 "/js/**",
+                                "/img/**",
                                 "/images/**",
-                                "/img/**"
+                                "/webjars/**",
+                                "/favicon.ico"
                         ).permitAll()
 
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // Área administrativa
+                        .requestMatchers("/admin", "/admin/**")
+                        .hasRole("ADMIN")
 
-                        .requestMatchers("/funcionario/**")
-                        .hasAnyRole("FUNCIONARIO", "ADMIN")
+                        // Área do funcionário
+                        .requestMatchers(
+                                "/funcionario",
+                                "/funcionario/**"
+                        ).hasAnyRole("FUNCIONARIO", "ADMIN")
 
-                        .requestMatchers("/pedidos/finalizar").authenticated()
+                        // Finalização de pedidos somente para clientes
+                        .requestMatchers("/pedidos/finalizar")
+                        .hasRole("CLIENTE")
 
+                        // Demais páginas públicas por enquanto
                         .anyRequest().permitAll()
                 )
 
@@ -70,16 +82,18 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("senha")
-                        .successHandler(customAuthenticationSuccessHandler)
+                        .successHandler(successHandler)
                         .failureUrl("/login?error")
                         .permitAll()
                 )
 
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
 
+        // A proteção CSRF permanece habilitada.
         return http.build();
     }
 }

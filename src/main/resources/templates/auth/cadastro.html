@@ -10,17 +10,35 @@
     <meta name="description"
           content="Crie sua conta na Bloom Coffee e faça seus pedidos.">
 
-    <link rel="stylesheet" th:href="@{/css/loginCliente.css}">
-    <link rel="stylesheet" th:href="@{/css/cadastro.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="icon"
+          type="image/png"
+          th:href="@{/img/favicon.png}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/loginCliente.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/cadastro.css}">
 </head>
 
 <body>
 
 <main class="form-panel">
+
     <section class="form-box">
 
-        <div class="logo">Bloom Coffee ☕</div>
+        <!-- Logo -->
+        <div class="logo">
+            Bloom Coffee ☕
+        </div>
 
+        <!-- Título -->
         <h1 style="text-align: center; font-size: 25px;">
             Crie sua conta
         </h1>
@@ -33,13 +51,18 @@
             * Campos obrigatórios.
         </p>
 
+        <!-- Formulário de cadastro -->
         <form th:action="@{/cadastro}"
               th:object="${cliente}"
               method="post">
 
-            <!-- Nome -->
+            <!-- Nome completo -->
             <div class="field">
-                <label for="nome">Nome completo *</label>
+
+                <label for="nome">
+                    Nome completo *
+                </label>
+
                 <input id="nome"
                        type="text"
                        th:field="*{nome}"
@@ -47,151 +70,234 @@
                        autocomplete="name"
                        placeholder="Digite seu nome completo"
                        required>
+
                 <small class="field-error"
                        th:if="${#fields.hasErrors('nome')}"
-                       th:errors="*{nome}"></small>
+                       th:errors="*{nome}">
+                </small>
+
             </div>
 
-            <!-- CPF: campo obrigatório no banco -->
+            <!-- CPF -->
             <div class="field">
-                <label for="cpf">CPF *</label>
+
+                <label for="cpf">
+                    CPF *
+                </label>
+
                 <input id="cpf"
                        type="text"
                        th:field="*{cpf}"
                        maxlength="11"
                        minlength="11"
                        inputmode="numeric"
+                       autocomplete="off"
                        placeholder="Somente os 11 números"
+                       pattern="[0-9]{11}"
+                       title="Digite os 11 números do CPF, sem pontos ou traços."
                        required>
+
                 <small class="field-error"
                        th:if="${#fields.hasErrors('cpf')}"
-                       th:errors="*{cpf}"></small>
+                       th:errors="*{cpf}">
+                </small>
+
             </div>
 
             <!-- Telefone -->
             <div class="field">
-                <label for="telefone">Telefone</label>
+
+                <label for="telefone">
+                    Telefone
+                </label>
+
                 <input id="telefone"
                        type="tel"
                        th:field="*{telefone}"
                        maxlength="20"
                        autocomplete="tel"
                        placeholder="(11) 99999-9999">
+
                 <small class="field-error"
                        th:if="${#fields.hasErrors('telefone')}"
-                       th:errors="*{telefone}"></small>
+                       th:errors="*{telefone}">
+                </small>
+
             </div>
 
-            <!-- E-mail -->
+            <!-- E-mail: armazenado em Usuario -->
             <div class="field">
-                <label for="email">E-mail *</label>
+
+                <label for="email">
+                    E-mail *
+                </label>
+
                 <input id="email"
                        type="email"
-                       th:field="*{email}"
+                       th:field="*{usuario.email}"
                        maxlength="100"
                        autocomplete="email"
                        placeholder="seuemail@exemplo.com"
                        required>
+
                 <small class="field-error"
-                       th:if="${#fields.hasErrors('email')}"
-                       th:errors="*{email}"></small>
+                       th:if="${#fields.hasErrors('usuario.email')}"
+                       th:errors="*{usuario.email}">
+                </small>
+
             </div>
 
-            <!-- Senha -->
+            <!-- Senha: armazenada em Usuario -->
             <div class="field">
-                <label for="senha">Senha *</label>
+
+                <label for="senha">
+                    Senha *
+                </label>
+
                 <input id="senha"
                        type="password"
-                       th:field="*{senha}"
+                       th:field="*{usuario.senha}"
                        minlength="8"
                        maxlength="100"
                        autocomplete="new-password"
                        placeholder="Crie uma senha"
                        required>
+
                 <small class="hint">
                     A senha deve ter pelo menos 8 caracteres.
                 </small>
+
                 <small class="field-error"
-                       th:if="${#fields.hasErrors('senha')}"
-                       th:errors="*{senha}"></small>
+                       th:if="${#fields.hasErrors('usuario.senha')}"
+                       th:errors="*{usuario.senha}">
+                </small>
+
             </div>
 
             <!-- Data de nascimento -->
             <div class="field">
-                <label for="dataNascimento">Data de nascimento</label>
+
+                <label for="dataNascimento">
+                    Data de nascimento
+                </label>
+
                 <input id="dataNascimento"
                        type="date"
                        th:field="*{dataNascimento}"
                        autocomplete="bday">
+
                 <small class="field-error"
                        th:if="${#fields.hasErrors('dataNascimento')}"
-                       th:errors="*{dataNascimento}"></small>
+                       th:errors="*{dataNascimento}">
+                </small>
+
             </div>
 
             <!-- Endereço -->
             <div class="field">
-                <label for="endereco">Endereço</label>
+
+                <label for="endereco">
+                    Endereço
+                </label>
+
                 <input id="endereco"
                        type="text"
                        th:field="*{endereco}"
                        maxlength="150"
                        autocomplete="street-address"
                        placeholder="Rua, número e complemento">
+
                 <small class="field-error"
                        th:if="${#fields.hasErrors('endereco')}"
-                       th:errors="*{endereco}"></small>
+                       th:errors="*{endereco}">
+                </small>
+
             </div>
 
             <!-- Bairro -->
             <div class="field">
-                <label for="bairro">Bairro</label>
+
+                <label for="bairro">
+                    Bairro
+                </label>
+
                 <input id="bairro"
                        type="text"
                        th:field="*{bairro}"
                        maxlength="100"
                        placeholder="Digite seu bairro">
+
                 <small class="field-error"
                        th:if="${#fields.hasErrors('bairro')}"
-                       th:errors="*{bairro}"></small>
+                       th:errors="*{bairro}">
+                </small>
+
             </div>
 
             <!-- Cidade -->
             <div class="field">
-                <label for="cidade">Cidade</label>
+
+                <label for="cidade">
+                    Cidade
+                </label>
+
                 <input id="cidade"
                        type="text"
                        th:field="*{cidade}"
                        maxlength="100"
                        autocomplete="address-level2"
                        placeholder="Digite sua cidade">
+
                 <small class="field-error"
                        th:if="${#fields.hasErrors('cidade')}"
-                       th:errors="*{cidade}"></small>
+                       th:errors="*{cidade}">
+                </small>
+
             </div>
 
-            <!-- Mensagem de erro -->
+            <!-- Mensagem de erro do cadastro -->
             <p class="mensagem-erro"
                th:if="${erro}"
                th:text="${erro}"
-               role="alert"></p>
+               role="alert">
+            </p>
 
-            <!-- Botão -->
-            <button type="submit" class="btn-primary-custom">
+            <!-- Erros gerais de validação -->
+            <div class="mensagem-erro"
+                 th:if="${#fields.hasGlobalErrors()}"
+                 role="alert">
+
+                <p th:each="erroGlobal : ${#fields.globalErrors()}"
+                   th:text="${erroGlobal}">
+                </p>
+
+            </div>
+
+            <!-- Botão de cadastro -->
+            <button type="submit"
+                    class="btn-primary-custom">
                 Criar minha conta
             </button>
 
         </form>
 
+        <!-- Link para login -->
         <p class="login-link">
             Já possui uma conta?
-            <a th:href="@{/login}">Entrar</a>
+            <a th:href="@{/login}">
+                Entrar
+            </a>
         </p>
 
+        <!-- Voltar à página inicial -->
         <p class="login-link">
-            <a th:href="@{/}">Voltar para a página inicial</a>
+            <a th:href="@{/}">
+                Voltar para a página inicial
+            </a>
         </p>
 
     </section>
+
 </main>
 
 </body>

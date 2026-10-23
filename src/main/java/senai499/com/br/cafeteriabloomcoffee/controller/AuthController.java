@@ -1,3 +1,4 @@
+
 package senai499.com.br.cafeteriabloomcoffee.controller;
 
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import senai499.com.br.cafeteriabloomcoffee.model.Cliente;
+import senai499.com.br.cafeteriabloomcoffee.model.Usuario;
 import senai499.com.br.cafeteriabloomcoffee.service.ClienteService;
 
 @Controller
@@ -29,7 +31,13 @@ public class AuthController {
 
     @GetMapping("/cadastro")
     public String exibirCadastro(Model model) {
-        model.addAttribute("cliente", new Cliente());
+        if (!model.containsAttribute("cliente")) {
+            Cliente cliente = new Cliente();
+            cliente.setUsuario(new Usuario());
+
+            model.addAttribute("cliente", cliente);
+        }
+
         return "auth/cadastro";
     }
 
@@ -41,12 +49,21 @@ public class AuthController {
             RedirectAttributes redirectAttributes) {
 
         if (resultado.hasErrors()) {
+            if (cliente.getUsuario() == null) {
+                cliente.setUsuario(new Usuario());
+            }
+
             return "auth/cadastro";
         }
 
         try {
             clienteService.cadastrar(cliente);
+
         } catch (IllegalArgumentException e) {
+            if (cliente.getUsuario() == null) {
+                cliente.setUsuario(new Usuario());
+            }
+
             model.addAttribute("erro", e.getMessage());
             return "auth/cadastro";
         }
