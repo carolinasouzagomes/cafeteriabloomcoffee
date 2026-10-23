@@ -93,6 +93,14 @@ public class Usuario implements UserDetails {
         return cliente;
     }
 
+    public String getNome() {
+        if (cliente != null) {
+            return cliente.getNome();
+        }
+
+        return email;
+    }
+
     public Funcionario getFuncionario() {
         return funcionario;
     }
@@ -137,4 +145,6 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return ativo;
     }
+
+
 }

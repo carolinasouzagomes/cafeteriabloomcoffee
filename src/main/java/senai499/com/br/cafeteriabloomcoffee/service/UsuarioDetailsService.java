@@ -21,8 +21,8 @@ public class UsuarioDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
-
-        Usuario usuario = usuarioRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository
+                .findByEmailComCliente(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "Usuário não encontrado: " + email
                 ));
@@ -30,3 +30,4 @@ public class UsuarioDetailsService implements UserDetailsService {
         return usuario;
     }
 }
+

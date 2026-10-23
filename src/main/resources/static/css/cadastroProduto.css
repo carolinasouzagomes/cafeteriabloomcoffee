@@ -65,3 +65,19 @@ button:hover {
     color: #23733a;
     text-align: center;
 }
+
+.btn-voltar {
+    display: inline-block;
+    margin-bottom: 22px;
+    padding: 11px 16px;
+    background-color: #e8dccd;
+    color: #4b3025;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-voltar:hover {
+    background-color: #d5c1ac;
+}
