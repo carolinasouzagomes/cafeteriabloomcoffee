@@ -1,0 +1,90 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f1e8;
+    color: #3e2a20;
+}
+
+header {
+    background: #4b3025;
+    color: #fff8ef;
+    padding: 24px 6%;
+}
+
+header h1 { margin: 0; }
+
+main {
+    max-width: 700px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.formulario {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 3px 14px #0000000d;
+}
+
+.campo {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cdbba8;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: 2px solid #9a7253;
+    border-color: #754b32;
+}
+
+.botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.botao {
+    display: inline-block;
+    padding: 12px 17px;
+    border: none;
+    border-radius: 7px;
+    background: #754b32;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.secundario {
+    background: #e6d7c5;
+    color: #3e2a20;
+}
+
+.erro {
+    background: #f8dfdf;
+    color: #922d2d;
+    border-radius: 7px;
+    padding: 12px;
+    margin-bottom: 18px;
+}
+
+.ajuda {
+    color: #765e4d;
+    font-size: 13px;
+    margin-top: 6px;
+}

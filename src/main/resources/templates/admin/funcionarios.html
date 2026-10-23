@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionários | Bloom Coffee</title>
+
+    <link rel="stylesheet" th:href="@{/css/funcionarios.css}">
+
+</head>
+
+<body>
+<header>
+    <div>
+        <h1>Bloom Coffee</h1>
+        <p>Administração de funcionários</p>
+    </div>
+
+    <a th:href="@{/admin/}" class="botao secundario">
+        Voltar ao painel
+    </a>
+</header>
+
+<main>
+    <div class="topo">
+        <div>
+            <h2>Funcionários</h2>
+            <p>Consulte e gerencie as contas da equipe.</p>
+        </div>
+
+        <a th:href="@{/admin/funcionarios/novo}" class="botao">
+            + Cadastrar funcionário
+        </a>
+    </div>
+
+    <div th:if="${sucesso}" class="sucesso"
+         th:text="${sucesso}"></div>
+
+    <div class="tabela-container">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="funcionario : ${funcionarios}">
+                <td th:text="${funcionario.idFuncionario}"></td>
+                <td th:text="${funcionario.nome}"></td>
+                <td th:text="${funcionario.cpf}"></td>
+                <td th:text="${funcionario.telefone != null
+                        ? funcionario.telefone : '-'}"></td>
+                <td th:text="${funcionario.email}"></td>
+
+                <td>
+                        <span th:if="${funcionario.usuario.ativo}"
+                              class="status ativo">
+                            Ativo
+                        </span>
+
+                    <span th:unless="${funcionario.usuario.ativo}"
+                          class="status inativo">
+                            Inativo
+                        </span>
+                </td>
+
+                <td>
+                    <div class="acoes">
+                        <form th:if="${funcionario.usuario.ativo}"
+                              th:action="@{/admin/funcionarios/{id}/inativar(
+                                      id=${funcionario.idFuncionario})}"
+                              method="post"
+                              onsubmit="return confirm(
+                                      'Deseja realmente inativar este funcionário?'
+                                  );">
+
+                            <button type="submit" class="botao">
+                                Inativar
+                            </button>
+                        </form>
+
+                        <form th:unless="${funcionario.usuario.ativo}"
+                              th:action="@{/admin/funcionarios/{id}/reativar(
+                                      id=${funcionario.idFuncionario})}"
+                              method="post">
+
+                            <button type="submit" class="botao">
+                                Reativar
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(funcionarios)}">
+                <td colspan="7" class="vazio">
+                    Nenhum funcionário cadastrado ainda.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer>
+    Bloom Coffee — Painel administrativo
+</footer>
+</body>
+</html>

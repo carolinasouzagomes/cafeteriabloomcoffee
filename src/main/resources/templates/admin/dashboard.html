@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração | Bloom Coffee</title>
+    <link rel="stylesheet"
+          th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<header>
+    <h1>Bloom Coffee</h1>
+    <p>Painel administrativo</p>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</header>
+
+<main>
+    <h2>Bem-vindo à administração!</h2>
+    <p>Gerencie os funcionários e as operações da cafeteria.</p>
+
+    <section class="menu-admin">
+        <a th:href="@{/admin/funcionarios}">
+            <h3>Funcionários</h3>
+            <p>Cadastrar, consultar, editar e inativar contas.</p>
+        </a>
+
+        <a th:href="@{/admin/produtos}">
+            <h3>Produtos</h3>
+            <p>Gerenciar o cardápio da cafeteria.</p>
+        </a>
+
+        <a th:href="@{/admin/estatisticas}">
+            <h3>Estatísticas</h3>
+            <p>Acompanhar os indicadores do sistema.</p>
+        </a>
+    </section>
+</main>
+
+</body>
+</html>
