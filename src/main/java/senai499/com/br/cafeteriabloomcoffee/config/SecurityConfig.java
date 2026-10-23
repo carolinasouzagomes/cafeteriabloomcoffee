@@ -51,6 +51,8 @@ public class SecurityConfig {
                                 "/",
                                 "/login",
                                 "/cadastro",
+                                "/cardapio",
+                                "/produtos",
                                 "/css/**",
                                 "/js/**",
                                 "/img/**",
@@ -73,7 +75,11 @@ public class SecurityConfig {
                         .requestMatchers("/pedidos/finalizar")
                         .hasRole("CLIENTE")
 
-                        // Demais páginas públicas por enquanto
+                        // Página de pedidos somente para clientes autenticados
+                        .requestMatchers("/pedidos", "/pedidos/**")
+                        .hasRole("CLIENTE")
+
+                        // Demais rotas continuam públicas por enquanto
                         .anyRequest().permitAll()
                 )
 

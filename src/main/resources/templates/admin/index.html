@@ -56,6 +56,10 @@
             <i class="bi bi-cup-straw"></i>
             Cardápio público
         </a>
+        <a th:href="@{/admin/pedidos}" class="menu-link">
+            <i class="bi bi-receipt"></i>
+            Acompanhar pedidos
+        </a>
     </nav>
 
     <div class="sidebar-bottom">
@@ -205,9 +209,9 @@
                             <div class="product-cell">
                                 <img class="product-image"
                                      th:if="${produto.arquivoImagem != null and !#strings.isEmpty(produto.arquivoImagem)}"
-                                     th:src="@{${produto.arquivoImagem}}"
-                                     th:alt="${produto.nome}">
-
+                                     th:src="${produto.arquivoImagem}"
+                                     th:alt="${produto.nome}"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                 <div class="product-placeholder"
                                      th:if="${produto.arquivoImagem == null or #strings.isEmpty(produto.arquivoImagem)}">
                                     <i class="bi bi-cup-hot"></i>
@@ -319,6 +323,15 @@
                         <div class="action-title">Página inicial</div>
                         <div class="action-description">
                             Volte para o site Bloom Coffee
+                        </div>
+                    </a>
+                    <a th:href="@{/admin/pedidos}" class="action-card">
+                        <div class="action-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                        <div class="action-title">Acompanhar pedidos</div>
+                        <div class="action-description">
+                            Consulte pedidos e atualize seus status
                         </div>
                     </a>
 

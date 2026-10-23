@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Acompanhar pedidos | Bloom Coffee</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/pedidoAdmin.css}">
+
+</head>
+
+<body>
+
+<header class="topbar">
+    <a th:href="@{/admin}" class="brand">
+        <i class="bi bi-cup-hot-fill"></i>
+        Bloom Coffee
+    </a>
+
+    <a th:href="@{/admin}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>
+        Voltar ao painel
+    </a>
+</header>
+
+<main class="main">
+
+    <div class="mb-4">
+        <h1 class="page-title">
+            <i class="bi bi-receipt"></i>
+            Acompanhar pedidos
+        </h1>
+
+        <p class="subtitle">
+            Consulte os pedidos e atualize o andamento de cada um.
+        </p>
+    </div>
+
+    <div th:if="${sucesso}"
+         class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span th:text="${sucesso}"></span>
+        <button type="button" class="btn-close"
+                data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${erro}"
+         class="alert alert-danger alert-dismissible fade show">
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        <span th:text="${erro}"></span>
+        <button type="button" class="btn-close"
+                data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        <span class="status status-pendente">
+            <i class="bi bi-clock me-1"></i> Pendente
+        </span>
+
+        <span class="status status-producao">
+            <i class="bi bi-fire me-1"></i> Em produção
+        </span>
+
+        <span class="status status-finalizado">
+            <i class="bi bi-check-circle me-1"></i> Finalizado
+        </span>
+
+        <span class="status status-cancelado">
+            <i class="bi bi-x-circle me-1"></i> Cancelado
+        </span>
+    </div>
+
+    <div th:if="${#lists.isEmpty(pedidos)}"
+         class="empty-state">
+        <i class="bi bi-cup-hot"></i>
+        <h2 class="h4 mt-3">Nenhum pedido por enquanto</h2>
+        <p class="text-secondary">
+            Quando um cliente finalizar uma compra, ela aparecerá aqui.
+        </p>
+    </div>
+
+    <section th:each="pedido : ${pedidos}"
+             class="order-card">
+
+        <div class="order-header">
+            <div>
+                <div class="order-number">
+                    Pedido #<span th:text="${pedido.idPedido}"></span>
+                </div>
+
+                <div class="text-secondary small"
+                     th:if="${pedido.dataPedido != null}"
+                     th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy HH:mm')}">
+                </div>
+            </div>
+
+            <span class="status status-pendente"
+                  th:if="${pedido.status == 'PENDENTE'}">
+                <i class="bi bi-clock me-1"></i> Pendente
+            </span>
+
+            <span class="status status-producao"
+                  th:if="${pedido.status == 'EM_PRODUCAO'}">
+                <i class="bi bi-fire me-1"></i> Em produção
+            </span>
+
+            <span class="status status-finalizado"
+                  th:if="${pedido.status == 'FINALIZADO'}">
+                <i class="bi bi-check-circle me-1"></i> Finalizado
+            </span>
+
+            <span class="status status-cancelado"
+                  th:if="${pedido.status == 'CANCELADO'}">
+                <i class="bi bi-x-circle me-1"></i> Cancelado
+            </span>
+
+            <span class="status"
+                  th:if="${pedido.status != 'PENDENTE'
+                       and pedido.status != 'EM_PRODUCAO'
+                       and pedido.status != 'FINALIZADO'
+                       and pedido.status != 'CANCELADO'}"
+                  th:text="${pedido.status}">
+            </span>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-12 col-lg-5">
+                <h2 class="section-title">
+                    <i class="bi bi-person me-1"></i>
+                    Dados do cliente
+                </h2>
+
+                <div class="info">
+                    <i class="bi bi-person-fill"></i>
+                    <strong th:text="${pedido.nome}"></strong>
+                </div>
+
+                <div class="info">
+                    <i class="bi bi-telephone-fill"></i>
+                    <span th:text="${pedido.telefone}"></span>
+                </div>
+
+                <div class="info">
+                    <i class="bi bi-envelope-fill"></i>
+                    <span th:text="${pedido.email}"></span>
+                </div>
+
+                <h2 class="section-title mt-4">
+                    <i class="bi bi-geo-alt-fill me-1"></i>
+                    Endereço de entrega
+                </h2>
+
+                <div class="info">
+                    <span th:text="${pedido.rua}"></span>,
+                    <span th:text="${pedido.numero}"></span>
+                </div>
+
+                <div class="info"
+                     th:if="${pedido.complemento != null
+                            and !#strings.isEmpty(pedido.complemento)}"
+                     th:text="${pedido.complemento}">
+                </div>
+
+                <div class="info">
+                    <span th:text="${pedido.bairro}"></span>
+                    -
+                    <span th:text="${pedido.cidade}"></span>
+                </div>
+
+                <div class="info">
+                    CEP: <span th:text="${pedido.cep}"></span>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-7">
+                <h2 class="section-title">
+                    <i class="bi bi-bag-check-fill me-1"></i>
+                    Itens do pedido
+                </h2>
+
+                <div class="item-list">
+                    <div th:each="item : ${pedido.itens}"
+                         class="item-row">
+
+                        <div>
+                            <strong th:text="${item.produto.nome}">
+                                Produto
+                            </strong>
+
+                            <div class="text-secondary small">
+                                Quantidade:
+                                <span th:text="${item.quantidade}"></span>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <span th:text="${'R$ ' + #numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">
+                                R$ 0,00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <span>Taxa de entrega</span>
+                    <strong th:text="${'R$ ' + #numbers.formatDecimal(pedido.taxaEntrega, 1, 'POINT', 2, 'COMMA')}">
+                        R$ 5,00
+                    </strong>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="fw-bold">Total</span>
+                    <span class="total"
+                          th:text="${'R$ ' + #numbers.formatDecimal(pedido.totalPreco, 1, 'POINT', 2, 'COMMA')}">
+                        R$ 0,00
+                    </span>
+                </div>
+
+                <div class="info mt-3">
+                    <i class="bi bi-credit-card-fill"></i>
+                    Pagamento:
+                    <strong th:text="${pedido.formaPagamento}"></strong>
+                </div>
+
+                <div class="info"
+                     th:if="${pedido.observacoes != null
+                            and !#strings.isEmpty(pedido.observacoes)}">
+                    <i class="bi bi-chat-left-text-fill"></i>
+                    Observações:
+                    <span th:text="${pedido.observacoes}"></span>
+                </div>
+            </div>
+        </div>
+
+        <form class="status-form"
+              th:action="@{/admin/pedidos/{id}/status(id=${pedido.idPedido})}"
+              method="post">
+
+            <label class="visually-hidden"
+                   th:for="${'status-' + pedido.idPedido}">
+                Atualizar status
+            </label>
+
+            <select class="form-select"
+                    name="status"
+                    th:id="${'status-' + pedido.idPedido}"
+                    required>
+
+                <option value="PENDENTE"
+                        th:selected="${pedido.status == 'PENDENTE'}">
+                    Pendente
+                </option>
+
+                <option value="EM_PRODUCAO"
+                        th:selected="${pedido.status == 'EM_PRODUCAO'}">
+                    Em produção
+                </option>
+
+                <option value="FINALIZADO"
+                        th:selected="${pedido.status == 'FINALIZADO'}">
+                    Finalizado
+                </option>
+
+                <option value="CANCELADO"
+                        th:selected="${pedido.status == 'CANCELADO'}">
+                    Cancelado
+                </option>
+            </select>
+
+            <button type="submit" class="btn btn-coffee">
+                <i class="bi bi-arrow-repeat me-1"></i>
+                Atualizar status
+            </button>
+        </form>
+
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

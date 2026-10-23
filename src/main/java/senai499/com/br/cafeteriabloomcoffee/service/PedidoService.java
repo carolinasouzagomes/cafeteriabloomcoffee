@@ -251,4 +251,32 @@ public class PedidoService {
     private String textoOuNull(String valor) {
         return vazio(valor) ? null : valor.trim();
     }
+
+
+    @Transactional(readOnly = true)
+    public List<Pedido> listarPedidosAdministrativos() {
+        return pedidoRepository.findAllByOrderByDataPedidoDesc();
+    }
+
+    @Transactional
+    public Pedido atualizarStatus(Long idPedido, String novoStatus) {
+
+        if (novoStatus == null || !List.of(
+                "PENDENTE",
+                "EM_PRODUCAO",
+                "FINALIZADO",
+                "CANCELADO"
+        ).contains(novoStatus)) {
+            throw new IllegalArgumentException("Status do pedido inválido.");
+        }
+
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Pedido não encontrado."));
+
+        pedido.setStatus(novoStatus);
+
+        return pedidoRepository.save(pedido);
+    }
+
 }

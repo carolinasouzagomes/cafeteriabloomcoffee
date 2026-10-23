@@ -378,3 +378,88 @@ form {
         padding: 34px 22px;
     }
 }
+
+
+/* ===== CAMPOS DE E-MAIL E SENHA ===== */
+
+.form-box .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 22px;
+}
+
+.form-box .field label {
+    color: #4b3026;
+    font-size: 14px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.form-box .field .form-control {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 52px;
+    box-sizing: border-box;
+
+    padding: 0 16px;
+    border: 1.5px solid #e4d3c5;
+    border-radius: 14px;
+
+    background-color: #fffaf5;
+    color: #3d2921;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    outline: none;
+    box-shadow: none;
+    transition: border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.form-box .field .form-control::placeholder {
+    color: #b5a398;
+    font-weight: 400;
+    opacity: 1;
+}
+
+.form-box .field .form-control:hover {
+    border-color: #c9a58b;
+}
+
+.form-box .field .form-control:focus {
+    border-color: #a65d36;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(166, 93, 54, 0.13);
+}
+
+.form-box .field .form-control:focus-visible {
+    outline: none;
+}
+
+/* Evita que o navegador aplique uma cor estranha ao preencher automaticamente */
+.form-box .field .form-control:-webkit-autofill {
+    -webkit-text-fill-color: #3d2921;
+    -webkit-box-shadow: 0 0 0 1000px #fffaf5 inset;
+    border: 1.5px solid #e4d3c5;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Mantém os campos dentro do formulário em telas pequenas */
+.form-box,
+.form-box form {
+    min-width: 0;
+    width: 100%;
+}
+
+.form-box .field .form-control:focus:-webkit-autofill {
+    -webkit-box-shadow:
+            0 0 0 1000px #ffffff inset,
+            0 0 0 4px rgba(166, 93, 54, 0.13);
+    border-color: #a65d36;
+}

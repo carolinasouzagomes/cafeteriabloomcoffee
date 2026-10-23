@@ -124,13 +124,8 @@
                 <article class="card product-card h-100">
 
                     <img class="card-img-top"
-                         th:if="${produto.arquivoImagem != null and !#strings.isEmpty(produto.arquivoImagem)}"
-                         th:src="${#strings.startsWith(produto.arquivoImagem, 'http')
-                            ? produto.arquivoImagem
-                            : (#strings.startsWith(produto.arquivoImagem, '/')
-                                ? produto.arquivoImagem
-                                : '/' + produto.arquivoImagem)}"
-                         th:alt="${produto.nome}">
+                         th:src="${produto.arquivoImagem != null and !produto.arquivoImagem.isBlank()
+                         ? '/img/' + produto.arquivoImagem    : '/img/produto-sem-imagem.png'}"  th:alt="${produto.nome}">
 
                     <div class="card-img-top d-flex align-items-center justify-content-center"
                          th:if="${produto.arquivoImagem == null or #strings.isEmpty(produto.arquivoImagem)}"
@@ -196,63 +191,96 @@
 
                         <div class="col-md-6">
                             <label for="nome" class="form-label">Nome completo</label>
-                            <input type="text" class="form-control" id="nome"
-                                   placeholder="Digite seu nome" required>
+                            <!-- Nome -->
+                            <input type="text"
+                                   class="form-control"
+                                   id="nome"
+                                   th:value="${cliente != null ? cliente.nome : ''}"
+                                   required>
                             <div class="invalid-feedback">Informe seu nome completo.</div>
                         </div>
 
                         <div class="col-md-6">
                             <label for="telefone" class="form-label">Telefone</label>
-                            <input type="tel" class="form-control" id="telefone"
-                                   placeholder="(00) 00000-0000" required>
+                            <input type="tel"
+                                   class="form-control"
+                                   id="telefone"
+                                   th:value="${cliente != null ? cliente.telefone : ''}"
+                                   required>
                             <div class="invalid-feedback">Informe seu telefone.</div>
                         </div>
 
                         <div class="col-12">
                             <label for="email" class="form-label">E-mail</label>
-                            <input type="email" class="form-control" id="email"
-                                   placeholder="seuemail@exemplo.com" required>
+                            <input type="email"
+                                   class="form-control"
+                                   id="email"
+                                   th:value="${cliente != null ? cliente.email : ''}"
+                                   required>
                             <div class="invalid-feedback">Informe um e-mail válido.</div>
                         </div>
 
                         <div class="col-md-8">
                             <label for="rua" class="form-label">Rua ou avenida</label>
-                            <input type="text" class="form-control" id="rua"
-                                   placeholder="Nome da rua ou avenida" required>
+                            <input type="text"
+                                   class="form-control"
+                                   id="rua"
+                                   th:value="${cliente != null ? cliente.endereco : ''}"
+                                   required>
                             <div class="invalid-feedback">Informe o endereço.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="numero" class="form-label">Número</label>
-                            <input type="text" class="form-control" id="numero"
-                                   placeholder="Número" required>
+                            <!-- Número: ainda não existe separado no cadastro -->
+                            <input type="text"
+                                   class="form-control"
+                                   id="numero"
+                                   placeholder="Número"
+                                   required>
                             <div class="invalid-feedback">Informe o número.</div>
                         </div>
 
                         <div class="col-md-5">
                             <label for="complemento" class="form-label">Complemento</label>
-                            <input type="text" class="form-control" id="complemento"
-                                   placeholder="Apartamento, bloco, casa...">
+                            <!-- Complemento: ainda não existe no cadastro -->
+                            <input type="text"
+                                   class="form-control"
+                                   id="complemento"
+                                   placeholder="Apartamento, bloco etc.">
                         </div>
 
                         <div class="col-md-4">
                             <label for="bairro" class="form-label">Bairro</label>
-                            <input type="text" class="form-control" id="bairro"
-                                   placeholder="Seu bairro" required>
+                            <!-- Bairro -->
+                            <input type="text"
+                                   class="form-control"
+                                   id="bairro"
+                                   th:value="${cliente != null ? cliente.bairro : ''}"
+                                   required>
                             <div class="invalid-feedback">Informe o bairro.</div>
                         </div>
 
                         <div class="col-md-3">
                             <label for="cep" class="form-label">CEP</label>
-                            <input type="text" class="form-control" id="cep"
-                                   placeholder="00000-000" required>
+                            <!-- CEP: ainda não existe no cadastro -->
+                            <input type="text"
+                                   class="form-control"
+                                   id="cep"
+                                   placeholder="00000-000"
+                                   maxlength="9"
+                                   required>
                             <div class="invalid-feedback">Informe o CEP.</div>
                         </div>
 
                         <div class="col-md-6">
                             <label for="cidade" class="form-label">Cidade</label>
-                            <input type="text" class="form-control" id="cidade"
-                                   placeholder="Sua cidade" required>
+                            <!-- Cidade -->
+                            <input type="text"
+                                   class="form-control"
+                                   id="cidade"
+                                   th:value="${cliente != null ? cliente.cidade : ''}"
+                                   required>
                             <div class="invalid-feedback">Informe a cidade.</div>
                         </div>
 
