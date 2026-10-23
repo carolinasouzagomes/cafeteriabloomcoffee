@@ -1,0 +1,21 @@
+.navbar-login-icon {
+    font-size: 1.3rem;
+    margin-left: 15px;
+    transition: all 0.3s ease;
+}
+
+.navbar-login-icon:hover {
+    transform: scale(1.15);
+    color: var(--laranja);
+}
+
+.navbar-login-link {
+    color: inherit !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-login-link:hover {
+    color: var(--laranja) !important;
+}

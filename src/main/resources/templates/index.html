@@ -13,30 +13,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
-    <style>
-        .navbar-login-icon {
-            font-size: 1.3rem;
-            margin-left: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-login-icon:hover {
-            transform: scale(1.15);
-            color: var(--laranja);
-        }
-
-        .navbar-login-link {
-            color: inherit !important;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar-login-link:hover {
-            color: var(--laranja) !important;
-        }
-    </style>
-
+    <link rel="stylesheet" th:href="@{/css/index_menu.css}">
 </head>
 
 <body>
@@ -59,10 +36,10 @@
                         <a class="nav-link" th:href="@{/}">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/produtos}">produto</a>
+                        <a class="nav-link" th:href="@{/produtos}">Cardápio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/cardapio}">pedidos</a>
+                        <a class="nav-link" th:href="@{/cardapio}">Pedidos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#historia">Nossa História</a>
